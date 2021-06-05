@@ -29,6 +29,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="on_ingresarcli_clicked" swapped="no"/>
+                    <signal name="delete-event" handler="win_delete_event" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -235,7 +237,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="datos_usuario" swapped="no"/>
                     <signal name="clicked" handler="on_btnsalir_clicked" swapped="no"/>
                     <signal name="delete-event" handler="win_delete" swapped="no"/>
                   </object>
@@ -338,6 +339,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <signal name="clicked" handler="on_salirpro_clicked" swapped="no"/>
+                    <signal name="delete-event" handler="win_delete_pro" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
