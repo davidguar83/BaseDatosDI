@@ -113,6 +113,8 @@ class ConexionBD:
                 if self.cursor is None:
                     print("Creando consulta: É necesario realizar a creación do cursor previamente")
                 else:
+
+
                     self.cursor.execute(consultaSQL, parametros)
 
                     for fila in self.cursor.fetchall():
@@ -128,13 +130,44 @@ class ConexionBD:
 
     def ingresarCliente(self,listarecibida):
 
-        lista = listarecibida()
 
-        self.cursor.execute("insert into clientes values( '" + lista[0]+
-        "' , '" + lista[1]+
-        "' , '" + lista[2]+
-        "' , '" + str(lista[3])+
-        "' , '" + str(lista[4])+"')")
+        try:
+            if self.conexion is None:
+                print("Creando consulta: É necesario realizar a conexión a base de datos previamente")
+            else:
+                if self.cursor is None:
+                    print("Creando consulta: É necesario realizar a creación do cursor previamente")
+                else:
+
+                    #lista = list()
+                    print("he llegado")
+                    lista = listarecibida
+
+                    for ele in lista:
+                        print(ele)
+                        self.cursor.execute("INSERT INTO clientes VALUES( '" + ele[0] +
+                                            "' , '" + ele[1] +
+                                            "' , '" + ele[2] +
+                                            "' , '" + str(ele[3]) +
+                                            "' , '" + str(ele[4]) + "')")
+
+
+
+
+
+
+        except dbapi.DatabaseError as e:
+            print("Erro facendo a consulta: " + str(e))
+            return None
+        else:
+            print("Operacion executada")
+
+
+
+
+
+
+
 
 
 

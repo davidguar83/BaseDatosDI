@@ -1,8 +1,10 @@
 import gi
 from conexionBD import ConexionBD
-gi.require_version("Gtk","3.0")
+
+gi.require_version("Gtk", "3.0")
 
 from gi.repository import Gtk
+
 
 class Ventana():
 
@@ -10,116 +12,107 @@ class Ventana():
         builder = Gtk.Builder()
         builder.add_from_file("INTERFAZDI.glade")
 
-        sinais={"gtk_main_quit": self.on_cerrar,
+        sinais = {"gtk_main_quit": self.on_cerrar,
 
-                "on_salirpro_clicked": self.btn_salir,
-                "on_btnsalir_clicked": self.btn_salir,
-                "on_salirven_clicked": self.btn_salir,
-                "on_ingresarcli_clicked": self.btn_ingrasar_cli,
-                "on_mostardatoscli_clicked" : self.btn_consulta_cli,
-                "on_modificardeudacli_clicked": self.btn_modi_deuda_cli,
-                "on_borrardatoscli_clicked": self.btn_borrar_cli,
-                "on_limpiarcli_clicked": self.btn_limpiar,
-                "on_ingrasarpro_clicked": self.btn_ingrasar_pro,
-                "on_mostrarpro_clicked": self.btn_consulta_pro,
-                "on_modificarpvppro_clicked": self.btn_modi_pvp_pro,
-                "on_borrarpro_clicked": self.btn_borrar_pro,
-                "on_limpiarpro_clicked": self.btn_limpiar,
-                "on_ingresarven_clicked": self.btn_ingrasar_ven,
-                "on_mostrardatosven_clicked": self.btn_consulta_ven,
-                "on_modificarcantven_clicked": self.btn_modi_cantidad_ven,
-                "on_borrarven_clicked": self.btn_borrar_ven,
-                "on_limpiarven_clicked": self.btn_limpiar,
+                  "on_salirpro_clicked": self.btn_salir,
+                  "on_btnsalir_clicked": self.btn_salir,
+                  "on_salirven_clicked": self.btn_salir,
+                  "on_ingresarcli_clicked": self.btn_ingrasar_cli,
+                  "on_mostardatoscli_clicked": self.btn_consulta_cli,
+                  "on_modificardeudacli_clicked": self.btn_modi_deuda_cli,
+                  "on_borrardatoscli_clicked": self.btn_borrar_cli,
+                  "on_limpiarcli_clicked": self.btn_limpiar,
+                  "on_ingrasarpro_clicked": self.btn_ingrasar_pro,
+                  "on_mostrarpro_clicked": self.btn_consulta_pro,
+                  "on_modificarpvppro_clicked": self.btn_modi_pvp_pro,
+                  "on_borrarpro_clicked": self.btn_borrar_pro,
+                  "on_limpiarpro_clicked": self.btn_limpiar,
+                  "on_ingresarven_clicked": self.btn_ingrasar_ven,
+                  "on_mostrardatosven_clicked": self.btn_consulta_ven,
+                  "on_modificarcantven_clicked": self.btn_modi_cantidad_ven,
+                  "on_borrarven_clicked": self.btn_borrar_ven,
+                  "on_limpiarven_clicked": self.btn_limpiar,
 
+                  }
 
-        }
+        builder.connect_signals(sinais)
 
-        builder.connect_signals (sinais)
+        # ventana cliente txt
 
-        #ventana cliente txt
+        self.txtdni = builder.get_object("txtdni")
+        self.txtnombre = builder.get_object("txtnombre")
+        self.txtapellidos = builder.get_object("txtapellidos")
+        self.txttelefono = builder.get_object("txttelefono")
+        self.txtdeuda = builder.get_object("txtdeuda")
+        self.txtcomentarios = builder.get_object("txtcomentarios")
 
-        self.txtdni = builder.get_object ("txtdni")
-        self.txtnombre = builder.get_object ("txtnombre")
-        self.txtapellidos = builder.get_object ("txtapellidos")
-        self.txttelefono = builder.get_object ("txttelefono")
-        self.txtdeuda = builder.get_object ("txtdeuda")
-        self.txtcomentarios = builder.get_object ("txtcomentarios")
+        # ventana provedor txt
 
-        #ventana provedor txt
-
-        self.txtrefpro = builder.get_object ("txtrefpro")
+        self.txtrefpro = builder.get_object("txtrefpro")
         self.txtnombrepro = builder.get_object("txtnombrepro")
         self.txtxpvppro = builder.get_object("txtxpvppro")
         self.txtcomentariospro = builder.get_object("txtcomentariospro")
 
-        #ventana ventas txt
+        # ventana ventas txt
 
         self.txtrefven = builder.get_object("txtrefven")
         self.txtnombreven = builder.get_object("txtnombreven")
         self.txtcanven = builder.get_object("txtcanven")
         self.txtcomentariosven = builder.get_object("txtcomentariosven")
 
-
         VentanaDatos = builder.get_object("VentanaDatos")
         VentanaDatos.show_all()
 
-    def on_cerrar (self):
+    def on_cerrar(self):
         Gtk.main_quit()
 
-
-
-    def btn_salir(self,boton):
+    def btn_salir(self, boton):
 
         print("boton pulsado")
         self.on_cerrar()
 
-
-
-
-
-
-    def btn_ingrasar_cli(self,boton):
+    def btn_ingrasar_cli(self, boton):
         baseDatos = ConexionBD("baseDI.dat")
         dni = self.txtdni.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?", dni)
-        for consulta in listaClientes:
 
-            ref=self.txtdni.get_text()
+        def is_emply(compro):
 
-            if dni == ref:
+            if len(compro) == 0:
+                return True
 
-                self.txtcomentarios.set_text("ERROR DNI duplicado")
+            return False
 
-            else:
+        print(is_emply(listaClientes))
+        consulta = list()
 
+        if is_emply(listaClientes) == True:
+            consulta.append(self.txtdni.get_text())
+            consulta.append(self.txtnombre.get_text())
+            consulta.append(self.txtapellidos.get_text())
+            consulta.append(self.txttelefono.get_text())
+            consulta.append(self.txtdeuda.get_text())
 
-                try:
+            for ele in consulta:
 
-                    listaClientes[0] = self.txtdni.get_text()
-                    listaClientes[1] = self.txtnombre.get_text()
-                    listaClientes[2] = self.txtapellidos.get_text()
-                    listaClientes[3] = self.txttelefono.get_text()
-                    listaClientes[4] = self.txtdeuda.get_text()
-
-
-
-
-                except gi.repository as e:
-
-                    print(e)
+                print(ele)
 
 
 
+
+            #metodo conexinDB
+
+            baseDatos.ingresarCliente(consulta)
+
+        else:
+                self.txtcomentarios.set_text("DNI duplicado")
+                print("dni duplicado")
 
     def btn_ingrasar_pro(self, boton):
         print("boton funciona")
 
     def btn_ingrasar_ven(self, boton):
         print("boton funciona")
-
-
-
-
 
     def btn_limpiar(self, boton):
 
@@ -138,30 +131,26 @@ class Ventana():
         self.txtxpvppro.set_text("")
         self.txtcanven.set_text("")
 
-
-
     def btn_consulta_cli(self, boton):
 
         baseDatos = ConexionBD("baseDI.dat")
         dni = self.txtdni.get_text()
-        listaClientes=baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?",dni)
+        listaClientes = baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?", dni)
         for consulta in listaClientes:
+            self.txtnombre.set_text(consulta[1])
+            self.txtapellidos.set_text(consulta[2])
+            self.txtdeuda.set_text(str(consulta[4]))
+            self.txttelefono.set_text(str(consulta[3]))
 
-          self.txtnombre.set_text(consulta[1])
-          self.txtapellidos.set_text(consulta[2])
-          self.txtdeuda.set_text(str(consulta[4]))
-          self.txttelefono.set_text(str(consulta[3]))
+        # print(listaClientes)
 
-       # print(listaClientes)
-
-        self.txtcomentarios.set_text ("consulta realizada")
+        self.txtcomentarios.set_text("consulta realizada")
 
     def btn_consulta_pro(self, boton):
         baseDatos = ConexionBD("baseDI.dat")
         ref = self.txtrefpro.get_text()
-        listaproductos=baseDatos.consultaConParametros("SELECT * FROM productos WHERE ref=?",ref)
+        listaproductos = baseDatos.consultaConParametros("SELECT * FROM productos WHERE ref=?", ref)
         for conpro in listaproductos:
-
             self.txtnombrepro.set_text(conpro[1])
             self.txtxpvppro.set_text(str(conpro[2]))
 
@@ -175,9 +164,7 @@ class Ventana():
             self.txtnombreven.set_text(conven[1])
             self.txtcanven.set_text(str(conven[2]))
 
-
         self.txtcomentariosven.set_text("consulta realizada")
-
 
     def btn_modi_deuda_cli(self, boton):
         print("boton funciona")
@@ -200,6 +187,7 @@ class Ventana():
     def on_txt(self):
 
         print("")
+
 
 if __name__ == "__main__":
     Ventana()
