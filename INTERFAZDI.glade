@@ -191,18 +191,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkTextView" id="txtcomentarios">
-                    <property name="name">txtcomentarios</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
-                    <property name="height">4</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkButton" id="borrardatoscli">
                     <property name="label" translatable="yes">Borrar Datos</property>
                     <property name="name">borrardatoscli</property>
@@ -244,6 +232,18 @@
                     <property name="left_attach">0</property>
                     <property name="top_attach">5</property>
                     <property name="width">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="txtcomentarios">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <signal name="activate" handler="on_txtcomentarios_activate" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="height">4</property>
                   </packing>
                 </child>
               </object>

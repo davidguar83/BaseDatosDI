@@ -30,12 +30,18 @@ class Ventana():
                 "on_modificarcantven_clicked": self.btn_modi_cantidad_ven,
                 "on_borrarven_clicked": self.btn_borrar_ven,
                 "on_limpiarven_clicked": self.btn_limpiar,
+                "on_txtcomentarios_activate": self.on_txt,
 
         }
 
         builder.connect_signals (sinais)
 
-        #self.txtdni = builder.get_object ("txtdni")
+        self.txtdni = builder.get_object ("txtdni")
+        self.txtnombre = builder.get_object ("txtnombre")
+        self.txtapellidos = builder.get_object ("txtapellidos")
+        self.txttelefono = builder.get_object ("txttelefono")
+        self.txtdeuda = builder.get_object ("txtdeuda")
+        self.txtcomentarios = builder.get_object ("txtcomentarios")
 
 
 
@@ -67,7 +73,13 @@ class Ventana():
         print("boton funciona")
 
     def btn_consulta_cli(self, boton):
-        print("boton funciona")
+
+        baseDatos = ConexionBD("baseDI.dat")
+        dni = self.txtdni.get_text()
+        listaClientes=baseDatos.consultasenParametros("SELECT * FROM clientes")
+        print(listaClientes)
+
+        self.txtcomentarios.set_text ("consulta realizada")
 
     def btn_consulta_pro(self, boton):
         print("boton funciona")
@@ -94,7 +106,9 @@ class Ventana():
     def btn_borrar_ven(self, boton):
         print("boton funciona")
 
+    def on_txt(self):
 
+        print("")
 
 if __name__ == "__main__":
     Ventana()
