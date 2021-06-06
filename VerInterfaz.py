@@ -27,7 +27,7 @@ class Ventana():
                   "on_modificarpvppro_clicked": self.btn_modi_pvp_pro,
                   "on_borrarpro_clicked": self.btn_borrar_pro,
                   "on_limpiarpro_clicked": self.btn_limpiar,
-                  "on_ingresarven_clicked": self.btn_ingrasar_ven,
+                  "on_ingresarven_clicked": self.btn_ingresar_ven,
                   "on_mostrardatosven_clicked": self.btn_consulta_ven,
                   "on_modificarcantven_clicked": self.btn_modi_cantidad_ven,
                   "on_borrarven_clicked": self.btn_borrar_ven,
@@ -77,13 +77,12 @@ class Ventana():
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?", dni)
 
         def is_emply(compro):
-
             if len(compro) == 0:
                 return True
-
             return False
 
-        print(is_emply(listaClientes))
+        #print(is_emply(listaClientes))
+
         consulta = list()
 
         if is_emply(listaClientes) == True:
@@ -98,15 +97,75 @@ class Ventana():
 
             baseDatos.ingresarCliente(consulta)
 
+            self.txtcomentarios.set_text("Operacion OK")
+
         else:
                 self.txtcomentarios.set_text("DNI duplicado")
                 print("dni duplicado")
 
     def btn_ingrasar_pro(self, boton):
-        print("boton funciona")
+        baseDatos = ConexionBD("baseDI.dat")
+        ref = self.txtrefpro.get_text()
+        listaClientes = baseDatos.consultaConParametros("SELECT * FROM productos WHERE ref=?", ref)
 
-    def btn_ingrasar_ven(self, boton):
-        print("boton funciona")
+        def is_emply(compro):
+            if len(compro) == 0:
+                return True
+            return False
+
+        consulta = list()
+
+        if is_emply(listaClientes) == True:
+            consulta.append(self.txtrefpro.get_text())
+            consulta.append(self.txtnombrepro.get_text())
+            consulta.append(self.txtxpvppro.get_text())
+
+            # metodo conexinDB
+
+            baseDatos.ingresarProducto(consulta)
+
+            self.txtcomentariospro.set_text("Operacion OK")
+
+        else:
+            self.txtcomentariospro.set_text("REF. duplicado")
+            print("REF. duplicado")
+
+
+
+
+        #print("boton funciona")
+        self.txtcomentariospro.set_text("Operacion OK")
+
+    def btn_ingresar_ven(self, boton):
+        baseDatos = ConexionBD("baseDI.dat")
+        ref = self.txtrefven.get_text()
+        listaClientes = baseDatos.consultaConParametros("SELECT * FROM ventas WHERE ref=?", ref)
+
+        def is_emply(compro):
+            if len(compro) == 0:
+                return True
+            return False
+
+        consulta = list()
+
+        if is_emply(listaClientes) == True:
+            consulta.append(self.txtrefven.get_text())
+            consulta.append(self.txtnombreven.get_text())
+            consulta.append(self.txtcanven.get_text())
+
+            # metodo conexinDB
+
+            baseDatos.ingresarVentas(consulta)
+
+            self.txtcomentariosven.set_text("Operacion OK")
+
+        else:
+            self.txtcomentariosven.set_text("REF. duplicado")
+            print("REF. duplicado")
+
+        # print("boton funciona")
+        self.txtcomentariosven.set_text("Operacion OK")
+
 
     def btn_limpiar(self, boton):
 
@@ -152,8 +211,8 @@ class Ventana():
 
     def btn_consulta_ven(self, boton):
         baseDatos = ConexionBD("baseDI.dat")
-        ref = self.txtrefven.get_text()
-        listaven = baseDatos.consultaConParametros("SELECT * FROM ventas WHERE ref=?", ref)
+        refven = self.txtrefven.get_text()
+        listaven = baseDatos.consultaConParametros("SELECT * FROM ventas WHERE ref=?", refven)
         for conven in listaven:
             self.txtnombreven.set_text(conven[1])
             self.txtcanven.set_text(str(conven[2]))

@@ -130,12 +130,36 @@ class ConexionBD:
 
     def ingresarCliente(self,listarecibida):
 
-        dni = None
-        nombre = None
-        apelli = None
-        telf = 0
-        deuda = 0
+        try:
+            if self.conexion is None:
+                print("Creando consulta: É necesario realizar a conexión a base de datos previamente")
+            else:
+                if self.cursor is None:
+                    print("Creando consulta: É necesario realizar a creación do cursor previamente")
+                else:
 
+                    lista = listarecibida
+
+                    self.cursor.execute("INSERT INTO clientes VALUES( '" + lista[0] +
+                                        "' , '" + lista[1] +
+                                        "' , '" + lista[2] +
+                                        "' , " + str(lista[3]) +
+                                        " , " + str(lista[4]) + ")")
+
+        except dbapi.DatabaseError as e:
+            print("Erro facendo insert cliente: " + str(e))
+            return None
+        else:
+            print("Operacion executada")
+
+            self.conexion.commit()
+
+    def is_emply(compro):
+        if len(compro) == 0:
+            return True
+        return False
+
+    def ingresarProducto(self,listarecibida):
 
         try:
             if self.conexion is None:
@@ -145,21 +169,14 @@ class ConexionBD:
                     print("Creando consulta: É necesario realizar a creación do cursor previamente")
                 else:
 
-                    #lista = list()
-                    print("he llegado")
-                    lista = listarecibida
+                    listaP = listarecibida
 
-                    self.cursor.execute("INSERT INTO clientes VALUES( '" + lista[0] +
-                                        "' , '" + lista[1] +
-                                        "' , '" + lista[2] +
-                                        "' , " + str(lista[3]) +
-                                        " , " + str(lista[4]) + ")")
-
-
-
+                    self.cursor.execute("INSERT INTO productos VALUES( " + str(listaP[0])+
+                                        " , '" + listaP[1] +
+                                        "' , " + str(listaP[2]) + ")")
 
         except dbapi.DatabaseError as e:
-            print("Erro facendo a consulta: " + str(e))
+            print("Erro facendo o insert producto: " + str(e))
             return None
         else:
             print("Operacion executada")
@@ -167,10 +184,28 @@ class ConexionBD:
 
 
 
+    def ingresarVentas(self,listarecibida):
 
+        try:
+            if self.conexion is None:
+                print("Creando consulta: É necesario realizar a conexión a base de datos previamente")
+            else:
+                if self.cursor is None:
+                    print("Creando consulta: É necesario realizar a creación do cursor previamente")
+                else:
 
+                    listaV = listarecibida
 
+                    self.cursor.execute("INSERT INTO ventas VALUES( " + str(listaV[0])+
+                                        " , '" + listaV[1] +
+                                        "' , " + str(listaV[2]) + ")")
 
+        except dbapi.DatabaseError as e:
+            print("Erro facendo o insert ventas: " + str(e))
+            return None
+        else:
+            print("Operacion executada")
+            self.conexion.commit()
 
 
 
