@@ -70,14 +70,27 @@ class Ventana():
         print("boton funciona")
 
     def btn_limpiar(self, boton):
-        print("boton funciona")
+
+        self.txtdni.set_text("")
+        self.txtnombre.set_text("")
+        self.txtapellidos.set_text("")
+        self.txtdeuda.set_text("")
+        self.txttelefono.set_text("")
+
 
     def btn_consulta_cli(self, boton):
 
         baseDatos = ConexionBD("baseDI.dat")
         dni = self.txtdni.get_text()
-        listaClientes=baseDatos.consultasenParametros("SELECT * FROM clientes")
-        print(listaClientes)
+        listaClientes=baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?",dni)
+        for consulta in listaClientes:
+
+          self.txtnombre.set_text(consulta[1])
+          self.txtapellidos.set_text(consulta[2])
+          self.txtdeuda.set_text(str(consulta[4]))
+          self.txttelefono.set_text(str(consulta[3]))
+
+       # print(listaClientes)
 
         self.txtcomentarios.set_text ("consulta realizada")
 

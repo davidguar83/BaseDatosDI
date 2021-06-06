@@ -7,6 +7,7 @@ class ConexionBD:
     """
 
     def __init__(self,rutaBd):
+
         """Crea as propiedades e as inicializa
 
         :param rutaBd: Ruta onde se encontra o ficheiro da base de datos SQlite
