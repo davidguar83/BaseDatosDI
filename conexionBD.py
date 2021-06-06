@@ -130,6 +130,12 @@ class ConexionBD:
 
     def ingresarCliente(self,listarecibida):
 
+        dni = None
+        nombre = None
+        apelli = None
+        telf = 0
+        deuda = 0
+
 
         try:
             if self.conexion is None:
@@ -143,15 +149,11 @@ class ConexionBD:
                     print("he llegado")
                     lista = listarecibida
 
-                    for ele in lista:
-                        print(ele)
-                        self.cursor.execute("INSERT INTO clientes VALUES( '" + ele[0] +
-                                            "' , '" + ele[1] +
-                                            "' , '" + ele[2] +
-                                            "' , '" + str(ele[3]) +
-                                            "' , '" + str(ele[4]) + "')")
-
-
+                    self.cursor.execute("INSERT INTO clientes VALUES( '" + lista[0] +
+                                        "' , '" + lista[1] +
+                                        "' , '" + lista[2] +
+                                        "' , " + str(lista[3]) +
+                                        " , " + str(lista[4]) + ")")
 
 
 
@@ -161,6 +163,7 @@ class ConexionBD:
             return None
         else:
             print("Operacion executada")
+            self.conexion.commit()
 
 
 

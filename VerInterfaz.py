@@ -93,12 +93,6 @@ class Ventana():
             consulta.append(self.txttelefono.get_text())
             consulta.append(self.txtdeuda.get_text())
 
-            for ele in consulta:
-
-                print(ele)
-
-
-
 
             #metodo conexinDB
 
