@@ -30,11 +30,13 @@ class Ventana():
                 "on_modificarcantven_clicked": self.btn_modi_cantidad_ven,
                 "on_borrarven_clicked": self.btn_borrar_ven,
                 "on_limpiarven_clicked": self.btn_limpiar,
-                "on_txtcomentarios_activate": self.on_txt,
+
 
         }
 
         builder.connect_signals (sinais)
+
+        #ventana cliente txt
 
         self.txtdni = builder.get_object ("txtdni")
         self.txtnombre = builder.get_object ("txtnombre")
@@ -43,6 +45,19 @@ class Ventana():
         self.txtdeuda = builder.get_object ("txtdeuda")
         self.txtcomentarios = builder.get_object ("txtcomentarios")
 
+        #ventana provedor txt
+
+        self.txtrefpro = builder.get_object ("txtrefpro")
+        self.txtnombrepro = builder.get_object("txtnombrepro")
+        self.txtxpvppro = builder.get_object("txtxpvppro")
+        self.txtcomentariospro = builder.get_object("txtcomentariospro")
+
+        #ventana ventas txt
+
+        self.txtrefven = builder.get_object("txtrefven")
+        self.txtnombreven = builder.get_object("txtnombreven")
+        self.txtcanven = builder.get_object("txtcanven")
+        self.txtcomentariosven = builder.get_object("txtcomentariosven")
 
 
         VentanaDatos = builder.get_object("VentanaDatos")
@@ -76,6 +91,16 @@ class Ventana():
         self.txtapellidos.set_text("")
         self.txtdeuda.set_text("")
         self.txttelefono.set_text("")
+        self.txtcomentarios.set_text("")
+        self.txtcomentariospro.set_text("")
+        self.txtcomentariosven.set_text("")
+        self.txtrefpro.set_text("")
+        self.txtrefven.set_text("")
+        self.txtnombrepro.set_text("")
+        self.txtnombreven.set_text("")
+        self.txtxpvppro.set_text("")
+        self.txtcanven.set_text("")
+
 
 
     def btn_consulta_cli(self, boton):
@@ -95,11 +120,27 @@ class Ventana():
         self.txtcomentarios.set_text ("consulta realizada")
 
     def btn_consulta_pro(self, boton):
-        print("boton funciona")
+        baseDatos = ConexionBD("baseDI.dat")
+        ref = self.txtrefpro.get_text()
+        listaproductos=baseDatos.consultaConParametros("SELECT * FROM productos WHERE ref=?",ref)
+        for conpro in listaproductos:
 
+            self.txtnombrepro.set_text(conpro[1])
+            self.txtxpvppro.set_text(str(conpro[2]))
+
+        self.txtcomentariospro.set_text("consulta realizada")
 
     def btn_consulta_ven(self, boton):
-        print("boton funciona")
+        baseDatos = ConexionBD("baseDI.dat")
+        ref = self.txtrefven.get_text()
+        listaven = baseDatos.consultaConParametros("SELECT * FROM ventas WHERE ref=?", ref)
+        for conven in listaven:
+            self.txtnombreven.set_text(conven[1])
+            self.txtcanven.set_text(str(conven[2]))
+
+
+        self.txtcomentariosven.set_text("consulta realizada")
+
 
     def btn_modi_deuda_cli(self, boton):
         print("boton funciona")

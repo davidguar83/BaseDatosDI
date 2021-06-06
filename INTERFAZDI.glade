@@ -265,7 +265,8 @@
                 <property name="row_spacing">36</property>
                 <property name="column_spacing">100</property>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="txtrefpro">
+                    <property name="name">txtrefpro</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -309,7 +310,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="txtnombrepro">
+                    <property name="name">txtnombrepro</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -317,18 +319,6 @@
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
                     <property name="height">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkTextView">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="margin_right">170</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
-                    <property name="height">4</property>
                   </packing>
                 </child>
                 <child>
@@ -360,7 +350,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="txtxpvppro">
+                    <property name="name">txtxpvppro</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -440,6 +431,18 @@
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkEntry" id="txtcomentariospro">
+                    <property name="name">txtcomentariospro</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="height">4</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -477,7 +480,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="txtrefven">
+                    <property name="name">txtrefven</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -533,7 +537,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="txtnombreven">
+                    <property name="name">txtnombreven</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -544,7 +549,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="txtcanven">
+                    <property name="name">txtcanven</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -580,17 +586,6 @@
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkTextView">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
-                    <property name="height">4</property>
                   </packing>
                 </child>
                 <child>
@@ -634,6 +629,18 @@
                     <property name="left_attach">0</property>
                     <property name="top_attach">5</property>
                     <property name="width">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="txtcomentariosven">
+                    <property name="name">txtcomentariosven</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="height">4</property>
                   </packing>
                 </child>
               </object>
