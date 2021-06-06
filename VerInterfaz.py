@@ -79,7 +79,6 @@ class Ventana():
 
 
     def btn_ingrasar_cli(self,boton):
-
         baseDatos = ConexionBD("baseDI.dat")
         dni = self.txtdni.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?", dni)
@@ -89,19 +88,25 @@ class Ventana():
 
             if dni == ref:
 
-                self.txtnombre.set_text(consulta[1])
-                self.txtapellidos.set_text(consulta[2])
-                self.txtdeuda.set_text(str(consulta[4]))
-                self.txttelefono.set_text(str(consulta[3]))
-
                 self.txtcomentarios.set_text("ERROR DNI duplicado")
 
             else:
 
-                """ORDEN INSERT"""
+
+                try:
+
+                    listaClientes[0] = self.txtdni.get_text()
+                    listaClientes[1] = self.txtnombre.get_text()
+                    listaClientes[2] = self.txtapellidos.get_text()
+                    listaClientes[3] = self.txttelefono.get_text()
+                    listaClientes[4] = self.txtdeuda.get_text()
 
 
 
+
+                except gi.repository as e:
+
+                    print(e)
 
 
 

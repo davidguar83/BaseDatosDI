@@ -126,6 +126,16 @@ class ConexionBD:
             return listaConsulta
 
 
+    def ingresarCliente(self,listarecibida):
+
+        lista = listarecibida()
+
+        self.cursor.execute("insert into clientes values( '" + lista[0]+
+        "' , '" + lista[1]+
+        "' , '" + lista[2]+
+        "' , '" + str(lista[3])+
+        "' , '" + str(lista[4])+"')")
+
 
 
 
