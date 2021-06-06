@@ -74,15 +74,47 @@ class Ventana():
         self.on_cerrar()
 
 
+
+
+
+
     def btn_ingrasar_cli(self,boton):
 
-        print("boton funciona")
+        baseDatos = ConexionBD("baseDI.dat")
+        dni = self.txtdni.get_text()
+        listaClientes = baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?", dni)
+        for consulta in listaClientes:
+
+            ref=self.txtdni.get_text()
+
+            if dni == ref:
+
+                self.txtnombre.set_text(consulta[1])
+                self.txtapellidos.set_text(consulta[2])
+                self.txtdeuda.set_text(str(consulta[4]))
+                self.txttelefono.set_text(str(consulta[3]))
+
+                self.txtcomentarios.set_text("ERROR DNI duplicado")
+
+            else:
+
+                """ORDEN INSERT"""
+
+
+
+
+
+
 
     def btn_ingrasar_pro(self, boton):
         print("boton funciona")
 
     def btn_ingrasar_ven(self, boton):
         print("boton funciona")
+
+
+
+
 
     def btn_limpiar(self, boton):
 
