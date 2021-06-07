@@ -235,6 +235,7 @@
                 </child>
                 <child>
                   <object class="GtkTreeView" id="treeviewcli">
+                    <property name="name">treeviewcli</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="margin_top">190</property>
@@ -446,6 +447,7 @@
                 </child>
                 <child>
                   <object class="GtkTreeView" id="treeviewpro">
+                    <property name="name">treeviewpro</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="margin_top">173</property>
@@ -661,6 +663,7 @@
                 </child>
                 <child>
                   <object class="GtkTreeView" id="treeviewven">
+                    <property name="name">treeviewven</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="margin_top">200</property>

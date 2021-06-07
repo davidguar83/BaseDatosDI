@@ -6,6 +6,9 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
 
+
+
+
 class Ventana():
 
     def __init__(self):
@@ -13,7 +16,7 @@ class Ventana():
         builder.add_from_file("INTERFAZDI.glade")
 
         sinais = {"gtk_main_quit": self.on_cerrar,
-
+                  "de" : Gtk.main_quit(),
                   "on_salirpro_clicked": self.btn_salir,
                   "on_btnsalir_clicked": self.btn_salir,
                   "on_salirven_clicked": self.btn_salir,
@@ -37,7 +40,19 @@ class Ventana():
 
         builder.connect_signals(sinais)
 
-        # ventana cliente txt
+        baseDatos = ConexionBD("baseDI.dat")
+        listaClientes = baseDatos.consultaSenParametros("SELECT * FROM clientes")
+
+        print(listaClientes)
+
+        def is_emply(compro):
+            if len(compro) == 0:
+                return True
+            return False
+
+        print(is_emply(listaClientes))
+
+        # ventana cliente txt y treeVied
 
         self.txtdni = builder.get_object("txtdni")
         self.txtnombre = builder.get_object("txtnombre")
@@ -45,6 +60,37 @@ class Ventana():
         self.txttelefono = builder.get_object("txttelefono")
         self.txtdeuda = builder.get_object("txtdeuda")
         self.txtcomentarios = builder.get_object("txtcomentarios")
+        self.treeView = builder.get_object("treeviewcli")
+        self.modelo_tabla = builder.get_object("treeviewcli")
+
+        columnascli = ["DNI",
+                       "Nombre",
+                       "Apellidos",
+                       "Telefono",
+                       "Deuda"]
+
+
+        modelo_tabla = Gtk.ListStore(str,str,str,str,str)
+        for cliente in listaClientes:
+            print("hola")
+            modelo_tabla.append ([cliente])
+
+
+
+        tablaCliente = Gtk.TreeView (model = modelo_tabla)
+
+        x=0
+
+        for columnas in columnascli:
+
+            celda = Gtk.CellRendererText()
+            colcli = Gtk.TreeViewColumn (columnas, celda, text=x)
+            tablaCliente.append_column(colcli)
+            x=x+1
+            print("lll")
+
+        self.treeVied.add(tablaCliente)
+
 
         # ventana provedor txt
 
@@ -52,6 +98,7 @@ class Ventana():
         self.txtnombrepro = builder.get_object("txtnombrepro")
         self.txtxpvppro = builder.get_object("txtxpvppro")
         self.txtcomentariospro = builder.get_object("txtcomentariospro")
+        self.treeViedpro = builder.get_object("treeviewpro")
 
         # ventana ventas txt
 
@@ -59,6 +106,7 @@ class Ventana():
         self.txtnombreven = builder.get_object("txtnombreven")
         self.txtcanven = builder.get_object("txtcanven")
         self.txtcomentariosven = builder.get_object("txtcomentariosven")
+        self.treeViedven = builder.get_object("treeviewven")
 
         VentanaDatos = builder.get_object("VentanaDatos")
         VentanaDatos.show_all()
@@ -322,10 +370,6 @@ class Ventana():
             print("REF no existe")
 
 
-
-
-
-        print("boton funciona")
 
     def btn_borrar_cli(self, boton):
         print("boton funciona")
