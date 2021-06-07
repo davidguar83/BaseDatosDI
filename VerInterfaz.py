@@ -220,6 +220,38 @@ class Ventana():
         self.txtcomentariosven.set_text("consulta realizada")
 
     def btn_modi_deuda_cli(self, boton):
+        baseDatos = ConexionBD("baseDI.dat")
+        dni = self.txtdni.get_text()
+        listaClientes = baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?", dni)
+
+        def is_emply(compro):
+            if len(compro) == 0:
+                return True
+            return False
+
+        # print(is_emply(listaClientes))
+
+        consulta = list()
+
+        if is_emply(listaClientes) == False:
+            consulta.append(self.txtdni.get_text())
+            consulta.append(self.txtnombre.get_text())
+            consulta.append(self.txtapellidos.get_text())
+            consulta.append(self.txttelefono.get_text())
+            consulta.append(self.txtdeuda.get_text())
+
+            # metodo conexinDB
+
+            baseDatos.modificarCliente(consulta)
+
+            self.txtcomentarios.set_text("Operacion OK")
+
+        else:
+            self.txtcomentarios.set_text("DNI no existe")
+            print("dni no existe")
+
+
+
         print("boton funciona")
 
     def btn_modi_pvp_pro(self, boton):

@@ -208,6 +208,32 @@ class ConexionBD:
             self.conexion.commit()
 
 
+    def modificarCliente(self,listarecibida):
 
+        try:
+            if self.conexion is None:
+                print("Creando consulta: É necesario realizar a conexión a base de datos previamente")
+            else:
+                if self.cursor is None:
+                    print("Creando consulta: É necesario realizar a creación do cursor previamente")
+                else:
+
+                    lista = listarecibida
+                    print("hola")
+
+                    dni = lista[0]
+
+                    self.cursor.execute("UPDATE clientes SET nome= '"+lista[1]+"' WHERE DNI= '"+dni+"'")
+
+
+
+
+        except dbapi.DatabaseError as e:
+            print("Erro facendo insert cliente: " + str(e))
+            return None
+        else:
+            print("Operacion executada")
+
+            self.conexion.commit()
 
 
