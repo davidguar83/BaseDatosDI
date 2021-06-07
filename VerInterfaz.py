@@ -16,9 +16,9 @@ class Ventana():
         builder.add_from_file("INTERFAZDI.glade")
 
         sinais = {"gtk_main_quit": self.on_cerrar,
-                  "de" : Gtk.main_quit(),
+
                   "on_salirpro_clicked": self.btn_salir,
-                  "on_btnsalir_clicked": self.btn_salir,
+                  "on_salircli_clicked": self.btn_salir,
                   "on_salirven_clicked": self.btn_salir,
                   "on_ingresarcli_clicked": self.btn_ingrasar_cli,
                   "on_mostardatoscli_clicked": self.btn_consulta_cli,
@@ -69,11 +69,14 @@ class Ventana():
                        "Telefono",
                        "Deuda"]
 
+        datos = [["ana","aggad","gdfag","dsfs","vdfb"],
+                 ["pepe","aggad","gdfag","dsfs","ddsv"]]
+
 
         modelo_tabla = Gtk.ListStore(str,str,str,str,str)
-        for cliente in listaClientes:
+        for cliente in datos:
             print("hola")
-            modelo_tabla.append ([cliente])
+            modelo_tabla.append (cliente)
 
 
 
@@ -89,7 +92,7 @@ class Ventana():
             x=x+1
             print("lll")
 
-        self.treeVied.add(tablaCliente)
+        #self.treeVied.add(tablaCliente)
 
 
         # ventana provedor txt
