@@ -4,6 +4,7 @@
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkWindow" id="VentanaDatos">
     <property name="can_focus">False</property>
+    <signal name="delete-event" handler="de" swapped="no"/>
     <child type="titlebar">
       <placeholder/>
     </child>
