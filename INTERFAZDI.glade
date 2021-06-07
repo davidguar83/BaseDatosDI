@@ -4,7 +4,6 @@
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkWindow" id="VentanaDatos">
     <property name="can_focus">False</property>
-    <signal name="delete-event" handler="win_delete_event" swapped="no"/>
     <child type="titlebar">
       <placeholder/>
     </child>
@@ -20,6 +19,7 @@
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_bottom">139</property>
                 <property name="row_spacing">36</property>
                 <property name="column_spacing">105</property>
                 <child>
@@ -30,7 +30,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <signal name="clicked" handler="on_ingresarcli_clicked" swapped="no"/>
-                    <signal name="delete-event" handler="win_delete_event" swapped="no"/>
+                    <signal name="delete-event" handler="on_ingresarcli_delete_event" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -191,6 +191,18 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkTextView" id="txtcomentarios">
+                    <property name="name">txtcomentarios</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="height">4</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkButton" id="borrardatoscli">
                     <property name="label" translatable="yes">Borrar Datos</property>
                     <property name="name">borrardatoscli</property>
@@ -225,8 +237,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_btnsalir_clicked" swapped="no"/>
-                    <signal name="delete-event" handler="win_delete" swapped="no"/>
+                    <signal name="clicked" handler="on_salircli_clicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -235,15 +246,18 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="txtcomentarios">
+                  <object class="GtkTreeView" id="treeviewcli">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <signal name="activate" handler="on_txtcomentarios_activate" swapped="no"/>
+                    <property name="margin_top">190</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
-                    <property name="height">4</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">6</property>
+                    <property name="width">4</property>
                   </packing>
                 </child>
               </object>
@@ -262,11 +276,10 @@
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">36</property>
-                <property name="column_spacing">100</property>
+                <property name="row_spacing">50</property>
+                <property name="column_spacing">80</property>
                 <child>
-                  <object class="GtkEntry" id="txtrefpro">
-                    <property name="name">txtrefpro</property>
+                  <object class="GtkEntry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -310,8 +323,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="txtnombrepro">
-                    <property name="name">txtnombrepro</property>
+                  <object class="GtkEntry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -322,6 +334,18 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkTextView">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="margin_right">170</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="height">4</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkButton" id="salirpro">
                     <property name="label" translatable="yes">Salir</property>
                     <property name="name">salirpro</property>
@@ -329,7 +353,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <signal name="clicked" handler="on_salirpro_clicked" swapped="no"/>
-                    <signal name="delete-event" handler="win_delete_pro" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -350,8 +373,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="txtxpvppro">
-                    <property name="name">txtxpvppro</property>
+                  <object class="GtkEntry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -432,15 +454,18 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="txtcomentariospro">
-                    <property name="name">txtcomentariospro</property>
+                  <object class="GtkTreeView" id="treeviewpro">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_top">173</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
-                    <property name="height">4</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">6</property>
+                    <property name="width">4</property>
                   </packing>
                 </child>
               </object>
@@ -480,8 +505,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="txtrefven">
-                    <property name="name">txtrefven</property>
+                  <object class="GtkEntry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -537,8 +561,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="txtnombreven">
-                    <property name="name">txtnombreven</property>
+                  <object class="GtkEntry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -549,8 +572,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="txtcanven">
-                    <property name="name">txtcanven</property>
+                  <object class="GtkEntry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>
@@ -586,6 +608,17 @@
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkTextView">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="height">4</property>
                   </packing>
                 </child>
                 <child>
@@ -632,15 +665,18 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="txtcomentariosven">
-                    <property name="name">txtcomentariosven</property>
+                  <object class="GtkTreeView" id="treeviewven">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_top">200</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
-                    <property name="height">4</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">6</property>
+                    <property name="width">4</property>
                   </packing>
                 </child>
               </object>
