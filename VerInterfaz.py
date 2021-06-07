@@ -174,15 +174,18 @@ class Ventana():
         self.txtapellidos.set_text("")
         self.txtdeuda.set_text("")
         self.txttelefono.set_text("")
-        self.txtcomentarios.set_text("")
-        self.txtcomentariospro.set_text("")
-        self.txtcomentariosven.set_text("")
+        self.txtcomentarios.set_text("operacion realizada")
+        self.txtcomentariospro.set_text("operacion realizada")
+        self.txtcomentariosven.set_text("operacion realizada")
         self.txtrefpro.set_text("")
         self.txtrefven.set_text("")
         self.txtnombrepro.set_text("")
         self.txtnombreven.set_text("")
         self.txtxpvppro.set_text("")
         self.txtcanven.set_text("")
+
+
+
 
     def btn_consulta_cli(self, boton):
 
@@ -255,9 +258,73 @@ class Ventana():
 
 
     def btn_modi_pvp_pro(self, boton):
-        print("boton funciona")
+        baseDatos = ConexionBD("baseDI.dat")
+        ref = self.txtrefpro.get_text()
+        listaClientes = baseDatos.consultaConParametros("SELECT * FROM productos WHERE ref=?", ref)
+
+        def is_emply(compro):
+            if len(compro) == 0:
+                return True
+            return False
+
+        # print(is_emply(listaClientes))
+
+        consulta = list()
+
+        if is_emply(listaClientes) == False:
+            consulta.append(self.txtrefpro.get_text())
+            consulta.append(self.txtnombrepro.get_text())
+            consulta.append(self.txtxpvppro.get_text())
+
+            # metodo conexinDB
+
+            baseDatos.modificarProductos(consulta)
+
+            self.txtcomentariospro.set_text("Operacion OK")
+
+        else:
+            self.txtcomentariospro.set_text("REF no existe")
+            print("REF no existe")
+
+
+
+
+
 
     def btn_modi_cantidad_ven(self, boton):
+
+        baseDatos = ConexionBD("baseDI.dat")
+        ref = self.txtrefven.get_text()
+        listaClientes = baseDatos.consultaConParametros("SELECT * FROM ventas WHERE ref=?", ref)
+
+        def is_emply(compro):
+            if len(compro) == 0:
+                return True
+            return False
+
+        # print(is_emply(listaClientes))
+
+        consulta = list()
+
+        if is_emply(listaClientes) == False:
+            consulta.append(self.txtrefven.get_text())
+            consulta.append(self.txtnombreven.get_text())
+            consulta.append(self.txtcanven.get_text())
+
+            # metodo conexinDB
+
+            baseDatos.modificarVentas(consulta)
+
+            self.txtcomentariosven.set_text("Operacion OK")
+
+        else:
+            self.txtcomentariosven.set_text("REF no existe")
+            print("REF no existe")
+
+
+
+
+
         print("boton funciona")
 
     def btn_borrar_cli(self, boton):

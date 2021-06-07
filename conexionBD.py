@@ -219,7 +219,7 @@ class ConexionBD:
                 else:
 
                     lista = listarecibida
-                    print("hola")
+
 
                     dni = lista[0]
 
@@ -237,3 +237,62 @@ class ConexionBD:
             self.conexion.commit()
 
 
+
+    def modificarProductos(self,listarecibida):
+
+        try:
+            if self.conexion is None:
+                print("Creando consulta: É necesario realizar a conexión a base de datos previamente")
+            else:
+                if self.cursor is None:
+                    print("Creando consulta: É necesario realizar a creación do cursor previamente")
+                else:
+
+                    lista = listarecibida
+
+
+                    ref = lista[0]
+
+                    self.cursor.execute("UPDATE productos SET nome= '"+lista[1]+"',pvp="+str(lista[2])+" WHERE ref= '"+ref+"'")
+
+
+
+
+        except dbapi.DatabaseError as e:
+            print("Erro facendo insert productos: " + str(e))
+            return None
+        else:
+            print("Operacion executada")
+
+            self.conexion.commit()
+
+
+
+
+    def modificarVentas(self,listarecibida):
+
+        try:
+            if self.conexion is None:
+                print("Creando consulta: É necesario realizar a conexión a base de datos previamente")
+            else:
+                if self.cursor is None:
+                    print("Creando consulta: É necesario realizar a creación do cursor previamente")
+                else:
+
+                    lista = listarecibida
+
+
+                    ref = lista[0]
+
+                    self.cursor.execute("UPDATE ventas SET nome= '"+lista[1]+"',cantidad="+str(lista[2])+" WHERE ref= '"+ref+"'")
+
+
+
+
+        except dbapi.DatabaseError as e:
+            print("Erro facendo insert ventas: " + str(e))
+            return None
+        else:
+            print("Operacion executada")
+
+            self.conexion.commit()
