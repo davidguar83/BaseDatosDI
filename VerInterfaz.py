@@ -252,7 +252,7 @@ class Ventana():
 
 
 
-        print("boton funciona")
+
 
     def btn_modi_pvp_pro(self, boton):
         print("boton funciona")

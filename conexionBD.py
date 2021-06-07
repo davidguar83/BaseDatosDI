@@ -223,7 +223,7 @@ class ConexionBD:
 
                     dni = lista[0]
 
-                    self.cursor.execute("UPDATE clientes SET nome= '"+lista[1]+"',apelledos='"+lista[2]+"',telefono='"+lista[3]+"',deuda='"+lista[4]+"' WHERE DNI= '"+dni+"'")
+                    self.cursor.execute("UPDATE clientes SET nome= '"+lista[1]+"',apelledos='"+lista[2]+"',telf="+str(lista[3])+",deuda="+str(lista[4])+" WHERE DNI= '"+dni+"'")
 
 
 
