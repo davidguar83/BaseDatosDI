@@ -61,7 +61,7 @@ class Ventana():
         self.txtdeuda = builder.get_object("txtdeuda")
         self.txtcomentarios = builder.get_object("txtcomentarios")
         self.treeView = builder.get_object("treeviewcli")
-        self.modelo_tabla = builder.get_object("treeviewcli")
+
 
         columnascli = ["DNI",
                        "Nombre",
@@ -69,18 +69,18 @@ class Ventana():
                        "Telefono",
                        "Deuda"]
 
-        datos = [["ana","aggad","gdfag","dsfs","vdfb"],
-                 ["pepe","aggad","gdfag","dsfs","ddsv"]]
 
 
-        modelo_tabla = Gtk.ListStore(str,str,str,str,str)
-        for cliente in datos:
-            print("hola")
+
+        modelo_tabla = Gtk.ListStore(str,str,str,str(str),str(str))
+        listaClientes = baseDatos.consultaSenParametros("SELECT * FROM clientes")
+
+        for cliente in listaClientes:
+
             modelo_tabla.append (cliente)
 
-
-
-        tablaCliente = Gtk.TreeView (model = modelo_tabla)
+        self.treeView.set_model(modelo_tabla)
+        #tablaCliente = Gtk.TreeView (model = modelo_tabla)
 
         x=0
 
@@ -88,11 +88,11 @@ class Ventana():
 
             celda = Gtk.CellRendererText()
             colcli = Gtk.TreeViewColumn (columnas, celda, text=x)
-            tablaCliente.append_column(colcli)
+            self.treeView.append_column(colcli)
             x=x+1
-            print("lll")
 
-        #self.treeVied.add(tablaCliente)
+
+        #self.treeView.add(tablaCliente)
 
 
         # ventana provedor txt
@@ -126,11 +126,13 @@ class Ventana():
         baseDatos = ConexionBD("baseDI.dat")
         dni = self.txtdni.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?", dni)
-
         def is_emply(compro):
             if len(compro) == 0:
                 return True
             return False
+
+
+
 
         #print(is_emply(listaClientes))
 
@@ -187,15 +189,18 @@ class Ventana():
         #print("boton funciona")
         self.txtcomentariospro.set_text("Operacion OK")
 
+
+
+
     def btn_ingresar_ven(self, boton):
         baseDatos = ConexionBD("baseDI.dat")
         ref = self.txtrefven.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM ventas WHERE ref=?", ref)
-
         def is_emply(compro):
             if len(compro) == 0:
                 return True
             return False
+
 
         consulta = list()
 
@@ -243,6 +248,18 @@ class Ventana():
         baseDatos = ConexionBD("baseDI.dat")
         dni = self.txtdni.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?", dni)
+
+
+        def is_emply(compro):
+            if len(compro) == 0:
+                return True
+            return False
+
+        if is_emply(listaClientes) == True:
+
+            self.txtcomentarios.set_text("Dni no valido")
+
+
         for consulta in listaClientes:
             self.txtnombre.set_text(consulta[1])
             self.txtapellidos.set_text(consulta[2])
@@ -257,6 +274,13 @@ class Ventana():
         baseDatos = ConexionBD("baseDI.dat")
         ref = self.txtrefpro.get_text()
         listaproductos = baseDatos.consultaConParametros("SELECT * FROM productos WHERE ref=?", ref)
+        def is_emply(compro):
+            if len(compro) == 0:
+                return True
+            return False
+        if is_emply(listaproductos) == True:
+            self.txtcomentarios("REF no valido")
+
         for conpro in listaproductos:
             self.txtnombrepro.set_text(conpro[1])
             self.txtxpvppro.set_text(str(conpro[2]))
@@ -267,6 +291,14 @@ class Ventana():
         baseDatos = ConexionBD("baseDI.dat")
         refven = self.txtrefven.get_text()
         listaven = baseDatos.consultaConParametros("SELECT * FROM ventas WHERE ref=?", refven)
+
+        def is_emply(compro):
+            if len(compro) == 0:
+                return True
+            return False
+
+        if is_emply(listaven) == True:
+            self.txtcomentarios("REF no valido")
         for conven in listaven:
             self.txtnombreven.set_text(conven[1])
             self.txtcanven.set_text(str(conven[2]))
@@ -277,13 +309,10 @@ class Ventana():
         baseDatos = ConexionBD("baseDI.dat")
         dni = self.txtdni.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?", dni)
-
         def is_emply(compro):
             if len(compro) == 0:
                 return True
             return False
-
-        # print(is_emply(listaClientes))
 
         consulta = list()
 
@@ -312,11 +341,11 @@ class Ventana():
         baseDatos = ConexionBD("baseDI.dat")
         ref = self.txtrefpro.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM productos WHERE ref=?", ref)
-
         def is_emply(compro):
             if len(compro) == 0:
                 return True
             return False
+
 
         # print(is_emply(listaClientes))
 
@@ -347,7 +376,6 @@ class Ventana():
         baseDatos = ConexionBD("baseDI.dat")
         ref = self.txtrefven.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM ventas WHERE ref=?", ref)
-
         def is_emply(compro):
             if len(compro) == 0:
                 return True
@@ -375,13 +403,94 @@ class Ventana():
 
 
     def btn_borrar_cli(self, boton):
-        print("boton funciona")
+
+
+
+        baseDatos = ConexionBD("baseDI.dat")
+        dni = self.txtdni.get_text()
+        listaClientes = baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?", dni)
+        def is_emply(compro):
+            if len(compro) == 0:
+                return True
+            return False
+
+        if is_emply(listaClientes) == True:
+
+            self.txtcomentarios.set_text("Dni no existe")
+
+        else:
+
+            for datodni in listaClientes:
+
+
+                dni = datodni[0]
+
+
+
+
+            baseDatos.borrarCliente(dni)
+
+            self.txtcomentarios.set_text("Cliente borrado")
+
+
+
+
+
+
+
 
     def btn_borrar_pro(self, boton):
-        print("boton funciona")
+
+        baseDatos = ConexionBD("baseDI.dat")
+        ref = self.txtrefpro.get_text()
+        listaClientes = baseDatos.consultaConParametros("SELECT * FROM productos WHERE ref=?", ref)
+
+        def is_emply(compro):
+            if len(compro) == 0:
+                return True
+            return False
+
+        if is_emply(listaClientes) == True:
+
+            self.txtcomentariospro.set_text("REF no existe")
+
+        else:
+
+            for datoref in listaClientes:
+                ref = datoref[0]
+
+            baseDatos.borrarProvedor(ref)
+
+            self.txtcomentariospro.set_text("Producto borrado")
+
+
+
+
 
     def btn_borrar_ven(self, boton):
-        print("boton funciona")
+
+        baseDatos = ConexionBD("baseDI.dat")
+        refv= self.txtrefpro.get_text()
+        listaClientes = baseDatos.consultaConParametros("SELECT * FROM ventas WHERE ref=?", refv)
+
+        def is_emply(compro):
+            if len(compro) == 0:
+                return True
+            return False
+
+        if is_emply(listaClientes) == True:
+
+            self.txtcomentariosven.set_text("REF no existe")
+
+        else:
+
+            for datorefv in listaClientes:
+                ref = datorefv[0]
+
+            baseDatos.borrarCliente(ref)
+
+            self.txtcomentariosven.set_text("Producto venta borrado")
+
 
     def on_txt(self):
 

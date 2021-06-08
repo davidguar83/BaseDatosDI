@@ -296,3 +296,87 @@ class ConexionBD:
             print("Operacion executada")
 
             self.conexion.commit()
+
+
+
+
+
+    def borrarCliente(self, dni):
+
+            try:
+                if self.conexion is None:
+                    print("Creando consulta: É necesario realizar a conexión a base de datos previamente")
+                else:
+                    if self.cursor is None:
+                        print("Creando consulta: É necesario realizar a creación do cursor previamente")
+                    else:
+
+                        DNI = dni
+
+
+                        self.cursor.execute(
+                            "DELETE FROM clientes WHERE DNI= '" + DNI + "'")
+
+
+
+
+            except dbapi.DatabaseError as e:
+                print("Erro facendo delete cliente: " + str(e))
+                return None
+            else:
+                print("Operacion executada")
+
+                self.conexion.commit()
+
+    """def borrarProvedor(self, ref):
+
+        try:
+            if self.conexion is None:
+                print("Creando consulta: É necesario realizar a conexión a base de datos previamente")
+            else:
+                if self.cursor is None:
+                    print("Creando consulta: É necesario realizar a creación do cursor previamente")
+                else:
+
+                    ref = ref
+
+                    self.cursor.execute(
+                        "DELETE FROM productos WHERE ref= '" + ref + "'")
+
+
+
+
+        except dbapi.DatabaseError as e:
+            print("Erro facendo delete productos: " + str(e))
+            return None
+        else:
+            print("Operacion executada")
+
+            self.conexion.commit()
+
+    def borrarVentas(self, ref):
+
+        try:
+            if self.conexion is None:
+                print("Creando consulta: É necesario realizar a conexión a base de datos previamente")
+            else:
+                if self.cursor is None:
+                    print("Creando consulta: É necesario realizar a creación do cursor previamente")
+                else:
+
+                    refv = ref
+
+                    self.cursor.execute(
+                        "DELETE FROM ventas WHERE ref= '" + refv + "'")
+
+
+
+
+        except dbapi.DatabaseError as e:
+            print("Erro facendo delete ventas: " + str(e))
+            return None
+        else:
+            print("Operacion executada")
+
+            self.conexion.commit()
+            """
