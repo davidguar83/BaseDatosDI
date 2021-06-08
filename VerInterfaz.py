@@ -40,8 +40,8 @@ class Ventana():
 
         builder.connect_signals(sinais)
 
-        baseDatos = ConexionBD("baseDI.dat")
-        listaClientes = baseDatos.consultaSenParametros("SELECT * FROM clientes")
+
+
 
         #print(listaClientes)
 
@@ -71,7 +71,15 @@ class Ventana():
 
 
 
+        columnaspro = ["Referen",
+                       "Nombre",
+                       "P.V.P."]
 
+
+
+        columnasven = []
+
+        baseDatos = ConexionBD("baseDI.dat")
         #modelo_tabla = Gtk.ListStore(str,str,str,str(str),str(str))
         modelo_tabla = Gtk.ListStore(str, str, str, int, int)
         listaClientes = baseDatos.consultaSenParametros("SELECT * FROM clientes")
