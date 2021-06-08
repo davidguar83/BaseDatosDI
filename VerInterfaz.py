@@ -43,14 +43,14 @@ class Ventana():
         baseDatos = ConexionBD("baseDI.dat")
         listaClientes = baseDatos.consultaSenParametros("SELECT * FROM clientes")
 
-        print(listaClientes)
+        #print(listaClientes)
 
         def is_emply(compro):
             if len(compro) == 0:
                 return True
             return False
 
-        print(is_emply(listaClientes))
+        #print(is_emply(listaClientes))
 
         # ventana cliente txt y treeVied
 
@@ -72,7 +72,8 @@ class Ventana():
 
 
 
-        modelo_tabla = Gtk.ListStore(str,str,str,str(str),str(str))
+        #modelo_tabla = Gtk.ListStore(str,str,str,str(str),str(str))
+        modelo_tabla = Gtk.ListStore(str, str, str, int, int)
         listaClientes = baseDatos.consultaSenParametros("SELECT * FROM clientes")
 
         for cliente in listaClientes:

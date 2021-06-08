@@ -20,7 +20,6 @@
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_bottom">139</property>
                 <property name="row_spacing">36</property>
                 <property name="column_spacing">105</property>
                 <child>
@@ -239,7 +238,6 @@
                     <property name="name">treeviewcli</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="margin_top">190</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection"/>
                     </child>
