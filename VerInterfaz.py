@@ -371,7 +371,7 @@ class Ventana():
             return False
 
         if is_emply(listaven) == True:
-            self.txtcomentarios.set_text("REF no valido")
+            self.txtcomentariosven.set_text("REF no valido")
         for conven in listaven:
             self.txtnombreven.set_text(conven[1])
             self.txtcanven.set_text(str(conven[2]))
@@ -546,8 +546,10 @@ class Ventana():
     def btn_borrar_ven(self, boton):
 
         baseDatos = ConexionBD("baseDI.dat")
-        ref= self.txtrefpro.get_text()
+        ref = self.txtrefven.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM ventas WHERE ref=?", ref)
+
+
 
         def is_emply(compro):
             if len(compro) == 0:
@@ -560,8 +562,8 @@ class Ventana():
 
         else:
 
-            for datorefv in listaClientes:
-                ref = datorefv[0]
+            for datoref in listaClientes:
+                ref = datoref[0]
 
             baseDatos.borrarVentas(ref)
 
