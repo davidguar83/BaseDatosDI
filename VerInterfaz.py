@@ -77,7 +77,7 @@ class Ventana():
 
 
 
-        columnasven = []
+        columnasven = ["Referencia","Nombre","Cantidad"]
 
         baseDatos = ConexionBD("baseDI.dat")
         #modelo_tabla = Gtk.ListStore(str,str,str,str(str),str(str))
@@ -91,26 +91,55 @@ class Ventana():
         self.treeView.set_model(modelo_tabla)
         #tablaCliente = Gtk.TreeView (model = modelo_tabla)
 
-        x=0
+        x = 0
 
         for columnas in columnascli:
 
             celda = Gtk.CellRendererText()
             colcli = Gtk.TreeViewColumn (columnas, celda, text=x)
             self.treeView.append_column(colcli)
-            x=x+1
+            x= x+1
 
 
         #self.treeView.add(tablaCliente)
 
 
-        # ventana provedor txt
+        # ventana provedor txt y treeweiv
+
 
         self.txtrefpro = builder.get_object("txtrefpro")
         self.txtnombrepro = builder.get_object("txtnombrepro")
         self.txtxpvppro = builder.get_object("txtxpvppro")
         self.txtcomentariospro = builder.get_object("txtcomentariospro")
         self.treeViedpro = builder.get_object("treeviewpro")
+
+        baseDatos = ConexionBD("baseDI.dat")
+        modelo_tabla_pro = Gtk.ListStore(int, str, int)
+        listaPro = baseDatos.consultaSenParametros("SELECT * FROM productos")
+
+        for produc in listaPro:
+
+            modelo_tabla_pro.append(produc)
+
+
+
+        self.treeViedpro.set_model(modelo_tabla_pro)
+
+
+        x = 0
+
+        for columpro in columnaspro:
+
+            celdapro = Gtk.CellRendererText()
+            colpro = Gtk.TreeViewColumn (columpro, celdapro, text=x)
+            self.treeViedpro.append_column(colpro)
+            x= x+1
+
+
+
+
+
+
 
         # ventana ventas txt
 
@@ -119,6 +148,32 @@ class Ventana():
         self.txtcanven = builder.get_object("txtcanven")
         self.txtcomentariosven = builder.get_object("txtcomentariosven")
         self.treeViedven = builder.get_object("treeviewven")
+
+
+
+        baseDatos = ConexionBD("baseDI.dat")
+        modelo_tabla_ven = Gtk.ListStore(int, str, int)
+        listaVen = baseDatos.consultaSenParametros("SELECT * FROM ventas")
+
+        for vent in listaVen:
+            modelo_tabla_ven.append(vent)
+
+        self.treeViedven.set_model(modelo_tabla_ven)
+
+        x = 0
+
+        for columven in columnasven:
+            celdaven = Gtk.CellRendererText()
+            colpro = Gtk.TreeViewColumn(columven, celdaven, text=x)
+            self.treeViedven.append_column(colpro)
+            x = x + 1
+
+
+
+
+
+
+
 
         VentanaDatos = builder.get_object("VentanaDatos")
         VentanaDatos.show_all()
@@ -186,9 +241,11 @@ class Ventana():
 
             baseDatos.ingresarProducto(consulta)
 
-            self.txtcomentariospro.set_text("Operacion OK")
+            #self.txtcomentariospro.set_text("Operacion OK")
+
 
         else:
+
             self.txtcomentariospro.set_text("REF. duplicado")
             print("REF. duplicado")
 
@@ -196,7 +253,7 @@ class Ventana():
 
 
         #print("boton funciona")
-        self.txtcomentariospro.set_text("Operacion OK")
+
 
 
 
@@ -225,11 +282,12 @@ class Ventana():
             self.txtcomentariosven.set_text("Operacion OK")
 
         else:
+
             self.txtcomentariosven.set_text("REF. duplicado")
             print("REF. duplicado")
 
         # print("boton funciona")
-        self.txtcomentariosven.set_text("Operacion OK")
+        #elf.txtcomentariosven.set_text("Operacion OK")
 
 
     def btn_limpiar(self, boton):
@@ -274,10 +332,11 @@ class Ventana():
             self.txtapellidos.set_text(consulta[2])
             self.txtdeuda.set_text(str(consulta[4]))
             self.txttelefono.set_text(str(consulta[3]))
+            self.txtcomentarios.set_text("consulta realizada")
 
         # print(listaClientes)
 
-        self.txtcomentarios.set_text("consulta realizada")
+
 
     def btn_consulta_pro(self, boton):
         baseDatos = ConexionBD("baseDI.dat")
@@ -288,13 +347,18 @@ class Ventana():
                 return True
             return False
         if is_emply(listaproductos) == True:
-            self.txtcomentarios("REF no valido")
+            print("hola")
+
+            self.txtcomentariospro.set_text("REF no valido")
 
         for conpro in listaproductos:
             self.txtnombrepro.set_text(conpro[1])
             self.txtxpvppro.set_text(str(conpro[2]))
 
-        self.txtcomentariospro.set_text("consulta realizada")
+            self.txtcomentariospro.set_text("consulta realizada")
+
+
+        #self.txtcomentariospro.set_text("consulta realizada")
 
     def btn_consulta_ven(self, boton):
         baseDatos = ConexionBD("baseDI.dat")
@@ -307,12 +371,13 @@ class Ventana():
             return False
 
         if is_emply(listaven) == True:
-            self.txtcomentarios("REF no valido")
+            self.txtcomentarios.set_text("REF no valido")
         for conven in listaven:
             self.txtnombreven.set_text(conven[1])
             self.txtcanven.set_text(str(conven[2]))
+            self.txtcomentariosven.set_text("consulta realizada")
 
-        self.txtcomentariosven.set_text("consulta realizada")
+
 
     def btn_modi_deuda_cli(self, boton):
         baseDatos = ConexionBD("baseDI.dat")
@@ -454,6 +519,8 @@ class Ventana():
         ref = self.txtrefpro.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM productos WHERE ref=?", ref)
 
+
+
         def is_emply(compro):
             if len(compro) == 0:
                 return True
@@ -479,8 +546,8 @@ class Ventana():
     def btn_borrar_ven(self, boton):
 
         baseDatos = ConexionBD("baseDI.dat")
-        refv= self.txtrefpro.get_text()
-        listaClientes = baseDatos.consultaConParametros("SELECT * FROM ventas WHERE ref=?", refv)
+        ref= self.txtrefpro.get_text()
+        listaClientes = baseDatos.consultaConParametros("SELECT * FROM ventas WHERE ref=?", ref)
 
         def is_emply(compro):
             if len(compro) == 0:
@@ -496,7 +563,7 @@ class Ventana():
             for datorefv in listaClientes:
                 ref = datorefv[0]
 
-            baseDatos.borrarCliente(ref)
+            baseDatos.borrarVentas(ref)
 
             self.txtcomentariosven.set_text("Producto venta borrado")
 

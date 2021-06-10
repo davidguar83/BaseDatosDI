@@ -328,55 +328,58 @@ class ConexionBD:
 
                 self.conexion.commit()
 
-    """def borrarProvedor(self, ref):
+    def borrarProvedor(self, ref):
 
-        try:
-            if self.conexion is None:
-                print("Creando consulta: É necesario realizar a conexión a base de datos previamente")
-            else:
-                if self.cursor is None:
-                    print("Creando consulta: É necesario realizar a creación do cursor previamente")
+            try:
+                if self.conexion is None:
+                    print("Creando consulta: É necesario realizar a conexión a base de datos previamente")
                 else:
+                    if self.cursor is None:
+                        print("Creando consulta: É necesario realizar a creación do cursor previamente")
+                    else:
 
-                    ref = ref
+                        ref = str(ref)
 
-                    self.cursor.execute(
-                        "DELETE FROM productos WHERE ref= '" + ref + "'")
-
-
+                        self.cursor.execute(
+                            "DELETE FROM productos WHERE ref= '" + ref + "'")
 
 
-        except dbapi.DatabaseError as e:
-            print("Erro facendo delete productos: " + str(e))
-            return None
-        else:
-            print("Operacion executada")
 
-            self.conexion.commit()
+
+            except dbapi.DatabaseError as e:
+                print("Erro facendo delete productos: " + str(e))
+                return None
+            else:
+                print("Operacion executada")
+
+                self.conexion.commit()
+
 
     def borrarVentas(self, ref):
 
-        try:
-            if self.conexion is None:
-                print("Creando consulta: É necesario realizar a conexión a base de datos previamente")
-            else:
-                if self.cursor is None:
-                    print("Creando consulta: É necesario realizar a creación do cursor previamente")
+            try:
+                if self.conexion is None:
+                    print("Creando consulta: É necesario realizar a conexión a base de datos previamente")
                 else:
+                    if self.cursor is None:
+                        print("Creando consulta: É necesario realizar a creación do cursor previamente")
+                    else:
 
-                    refv = ref
+                        ref = str(ref)
 
-                    self.cursor.execute(
-                        "DELETE FROM ventas WHERE ref= '" + refv + "'")
-
-
+                        self.cursor.execute(
+                            "DELETE FROM ventas WHERE ref= '" + ref + "'")
 
 
-        except dbapi.DatabaseError as e:
-            print("Erro facendo delete ventas: " + str(e))
-            return None
-        else:
-            print("Operacion executada")
 
-            self.conexion.commit()
-            """
+
+            except dbapi.DatabaseError as e:
+                print("Erro facendo delete ventas: " + str(e))
+                return None
+            else:
+                print("Operacion executada")
+
+                self.conexion.commit()
+
+
+
