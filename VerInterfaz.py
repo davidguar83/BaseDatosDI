@@ -52,6 +52,8 @@ class Ventana():
         self.txtcomentarios = builder.get_object("txtcomentarios")
         self.treeView = builder.get_object("treeviewcli")
 
+
+
         # ventana provedor txt y treeweiv
 
         self.txtrefpro = builder.get_object("txtrefpro")
@@ -478,13 +480,15 @@ class Ventana():
 
         print("")
 
+    modelo_tabla = Gtk.ListStore(str, str, str, int, int)
+
     def montatreeWievCli(self):
 
         #self.treeView.Nodes.Clear()
 
         baseDatos = ConexionBD("baseDI.dat")
 
-        modelo_tabla = Gtk.ListStore(str, str, str, int, int)
+
 
         listaClientes = baseDatos.consultaSenParametros("SELECT * FROM clientes")
 
@@ -493,15 +497,17 @@ class Ventana():
 
 
         for cliente in listaClientes:
-            modelo_tabla.append(cliente)
+            self.modelo_tabla.append(cliente)
 
-        self.treeView.set_model(modelo_tabla)
+        self.treeView.set_model(self.modelo_tabla)
         x = 0
         columnascli = ["DNI", "Nombre", "Apellidos", "Telefono", "Deuda"]
 
         for columnas in columnascli:
             celda = Gtk.CellRendererText()
             colcli = Gtk.TreeViewColumn(columnas, celda, text=x)
+            celda.props.editable = True
+            celda.connect("edited", self.on_celta_edite,x,self.modelo_tabla)
 
             #ordenar las columnas por valor
 
@@ -512,6 +518,14 @@ class Ventana():
 
         self.treeView.set_reorderable(True)
     # self.treeView.add(tablaCliente)
+
+
+    def on_celta_edite(self,celda,fila,texto,columna,modelo):
+        modelo [fila][columna] = texto
+
+
+
+
 
 
 
