@@ -1,3 +1,5 @@
+
+
 import gi
 from conexionBD import ConexionBD
 
@@ -533,8 +535,11 @@ class Ventana():
         for columpro in columnaspro:
             celdapro = Gtk.CellRendererText()
             colpro = Gtk.TreeViewColumn(columpro, celdapro, text=x)
+
+            colpro.set_sort_column_id(x)
             self.treeViedpro.append_column(colpro)
             x = x + 1
+        self.treeViedpro.set_reorderable(True)
 
     def montatreeWievVen(self):
 
@@ -556,10 +561,11 @@ class Ventana():
         for columpro in columnasven:
             celdaven = Gtk.CellRendererText()
             colven = Gtk.TreeViewColumn(columpro, celdaven, text=x)
+            colven.set_sort_column_id(x)
             self.treeViedven.append_column(colven)
             x = x + 1
 
-
+        self.treeViedven.set_reorderable(True)
 
 
     def limpiarTreeCli(self):
