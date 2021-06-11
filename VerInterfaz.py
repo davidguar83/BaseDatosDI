@@ -40,18 +40,6 @@ class Ventana():
 
         builder.connect_signals(sinais)
 
-
-
-
-        #print(listaClientes)
-
-        def is_emply(compro):
-            if len(compro) == 0:
-                return True
-            return False
-
-        #print(is_emply(listaClientes))
-
         # ventana cliente txt y treeVied
 
         self.txtdni = builder.get_object("txtdni")
@@ -62,83 +50,13 @@ class Ventana():
         self.txtcomentarios = builder.get_object("txtcomentarios")
         self.treeView = builder.get_object("treeviewcli")
 
-
-        columnascli = ["DNI",
-                       "Nombre",
-                       "Apellidos",
-                       "Telefono",
-                       "Deuda"]
-
-
-
-        columnaspro = ["Referen",
-                       "Nombre",
-                       "P.V.P."]
-
-
-
-        columnasven = ["Referencia","Nombre","Cantidad"]
-
-        baseDatos = ConexionBD("baseDI.dat")
-        #modelo_tabla = Gtk.ListStore(str,str,str,str(str),str(str))
-        modelo_tabla = Gtk.ListStore(str, str, str, int, int)
-        listaClientes = baseDatos.consultaSenParametros("SELECT * FROM clientes")
-
-        for cliente in listaClientes:
-
-            modelo_tabla.append (cliente)
-
-        self.treeView.set_model(modelo_tabla)
-        #tablaCliente = Gtk.TreeView (model = modelo_tabla)
-
-        x = 0
-
-        for columnas in columnascli:
-
-            celda = Gtk.CellRendererText()
-            colcli = Gtk.TreeViewColumn (columnas, celda, text=x)
-            self.treeView.append_column(colcli)
-            x= x+1
-
-
-        #self.treeView.add(tablaCliente)
-
-
         # ventana provedor txt y treeweiv
-
 
         self.txtrefpro = builder.get_object("txtrefpro")
         self.txtnombrepro = builder.get_object("txtnombrepro")
         self.txtxpvppro = builder.get_object("txtxpvppro")
         self.txtcomentariospro = builder.get_object("txtcomentariospro")
         self.treeViedpro = builder.get_object("treeviewpro")
-
-        baseDatos = ConexionBD("baseDI.dat")
-        modelo_tabla_pro = Gtk.ListStore(int, str, int)
-        listaPro = baseDatos.consultaSenParametros("SELECT * FROM productos")
-
-        for produc in listaPro:
-
-            modelo_tabla_pro.append(produc)
-
-
-
-        self.treeViedpro.set_model(modelo_tabla_pro)
-
-
-        x = 0
-
-        for columpro in columnaspro:
-
-            celdapro = Gtk.CellRendererText()
-            colpro = Gtk.TreeViewColumn (columpro, celdapro, text=x)
-            self.treeViedpro.append_column(colpro)
-            x= x+1
-
-
-
-
-
 
 
         # ventana ventas txt
@@ -150,30 +68,11 @@ class Ventana():
         self.treeViedven = builder.get_object("treeviewven")
 
 
+        self.montatreeWievCli()
+        self.montatreeWievPro()
+        self.montatreeWievVen()
 
-        baseDatos = ConexionBD("baseDI.dat")
-        modelo_tabla_ven = Gtk.ListStore(int, str, int)
-        listaVen = baseDatos.consultaSenParametros("SELECT * FROM ventas")
-
-        for vent in listaVen:
-            modelo_tabla_ven.append(vent)
-
-        self.treeViedven.set_model(modelo_tabla_ven)
-
-        x = 0
-
-        for columven in columnasven:
-            celdaven = Gtk.CellRendererText()
-            colpro = Gtk.TreeViewColumn(columven, celdaven, text=x)
-            self.treeViedven.append_column(colpro)
-            x = x + 1
-
-
-
-
-
-
-
+        self.visualizarTreeWeiv()
 
         VentanaDatos = builder.get_object("VentanaDatos")
         VentanaDatos.show_all()
@@ -216,6 +115,9 @@ class Ventana():
 
             self.txtcomentarios.set_text("Operacion OK")
 
+
+            #self.montatreeWievCli()
+
         else:
                 self.txtcomentarios.set_text("DNI duplicado")
                 print("dni duplicado")
@@ -241,7 +143,9 @@ class Ventana():
 
             baseDatos.ingresarProducto(consulta)
 
-            #self.txtcomentariospro.set_text("Operacion OK")
+            #self.montatreeWievPro()
+
+            self.txtcomentariospro.set_text("Operacion OK")
 
 
         else:
@@ -280,6 +184,7 @@ class Ventana():
             baseDatos.ingresarVentas(consulta)
 
             self.txtcomentariosven.set_text("Operacion OK")
+            #self.montatreeWievVen()
 
         else:
 
@@ -287,7 +192,7 @@ class Ventana():
             print("REF. duplicado")
 
         # print("boton funciona")
-        #elf.txtcomentariosven.set_text("Operacion OK")
+        #self.txtcomentariosven.set_text("Operacion OK")
 
 
     def btn_limpiar(self, boton):
@@ -402,6 +307,7 @@ class Ventana():
             baseDatos.modificarCliente(consulta)
 
             self.txtcomentarios.set_text("Operacion OK")
+            #self.montatreeWievCli()
 
         else:
             self.txtcomentarios.set_text("DNI no existe")
@@ -434,7 +340,8 @@ class Ventana():
 
             baseDatos.modificarProductos(consulta)
 
-            self.txtcomentariospro.set_text("Operacion OK")
+            self.txtcomentariospro.set_text("Modificacion  OK")
+            #self.montatreeWievPro()
 
         else:
             self.txtcomentariospro.set_text("REF no existe")
@@ -468,7 +375,8 @@ class Ventana():
 
             baseDatos.modificarVentas(consulta)
 
-            self.txtcomentariosven.set_text("Operacion OK")
+            self.txtcomentariosven.set_text("Modificacion OK")
+            #self.montatreeWievVen()
 
         else:
             self.txtcomentariosven.set_text("REF no existe")
@@ -505,12 +413,7 @@ class Ventana():
             baseDatos.borrarCliente(dni)
 
             self.txtcomentarios.set_text("Cliente borrado")
-
-
-
-
-
-
+            #self.montatreeWievCli()
 
 
     def btn_borrar_pro(self, boton):
@@ -538,9 +441,7 @@ class Ventana():
             baseDatos.borrarProvedor(ref)
 
             self.txtcomentariospro.set_text("Producto borrado")
-
-
-
+            #self.montatreeWievPro()
 
 
     def btn_borrar_ven(self, boton):
@@ -568,11 +469,127 @@ class Ventana():
             baseDatos.borrarVentas(ref)
 
             self.txtcomentariosven.set_text("Producto venta borrado")
+            #self.montatreeWievVen()
 
 
     def on_txt(self):
 
         print("")
+
+    def montatreeWievCli(self):
+
+        #self.treeView.Nodes.Clear()
+
+        baseDatos = ConexionBD("baseDI.dat")
+
+        modelo_tabla = Gtk.ListStore(str, str, str, int, int)
+
+        listaClientes = baseDatos.consultaSenParametros("SELECT * FROM clientes")
+
+        #for registro in listaClientes:
+            #modelo_tabla.delete(registro)
+
+
+        for cliente in listaClientes:
+            modelo_tabla.append(cliente)
+
+        self.treeView.set_model(modelo_tabla)
+        x = 0
+        columnascli = ["DNI", "Nombre", "Apellidos", "Telefono", "Deuda"]
+
+        for columnas in columnascli:
+            celda = Gtk.CellRendererText()
+            colcli = Gtk.TreeViewColumn(columnas, celda, text=x)
+
+            #ordenar las columnas por valor
+
+            colcli.set_sort_column_id(x)
+
+            self.treeView.append_column(colcli)
+            x = x + 1
+
+        self.treeView.set_reorderable(True)
+    # self.treeView.add(tablaCliente)
+
+
+
+    def montatreeWievPro(self):
+
+        columnaspro = ["Referen",
+                       "Nombre",
+                       "P.V.P."]
+
+        baseDatos = ConexionBD("baseDI.dat")
+        modelo_tabla_pro = Gtk.ListStore(int, str, int)
+        listaPro = baseDatos.consultaSenParametros("SELECT * FROM productos")
+
+        for produc in listaPro:
+            modelo_tabla_pro.append(produc)
+
+        self.treeViedpro.set_model(modelo_tabla_pro)
+
+        x = 0
+
+        for columpro in columnaspro:
+            celdapro = Gtk.CellRendererText()
+            colpro = Gtk.TreeViewColumn(columpro, celdapro, text=x)
+            self.treeViedpro.append_column(colpro)
+            x = x + 1
+
+    def montatreeWievVen(self):
+
+        columnasven = ["Referencia",
+                       "Nombre",
+                       "Cantidad"]
+
+        baseDatos = ConexionBD("baseDI.dat")
+        modelo_tabla_ven = Gtk.ListStore(int, str, int)
+        listaPro = baseDatos.consultaSenParametros("SELECT * FROM ventas")
+
+        for produc in listaPro:
+            modelo_tabla_ven.append(produc)
+
+        self.treeViedven.set_model(modelo_tabla_ven)
+
+        x = 0
+
+        for columpro in columnasven:
+            celdaven = Gtk.CellRendererText()
+            colven = Gtk.TreeViewColumn(columpro, celdaven, text=x)
+            self.treeViedven.append_column(colven)
+            x = x + 1
+
+
+
+
+    def limpiarTreeCli(self):
+
+        modelo_tabla = Gtk.ListStore(str, str, str, int, int)
+
+        modelo_tabla.clear()
+
+        self.treeView.set_model(modelo_tabla)
+
+
+        x = 0
+        columnascli = ["DNI", "Nombre", "Apellidos", "Telefono", "Deuda"]
+
+        for columnas in columnascli:
+            celda = Gtk.CellRendererText()
+            colcli = Gtk.TreeViewColumn(columnas, celda, text=x)
+            self.treeView.append_column(colcli)
+            x = x + 1
+
+
+    def visualizarTreeWeiv(self):
+
+        registros = self.treeView.get_children()
+        for registro in registros:
+            print(registro[0])
+            print("ooo")
+
+
+
 
 
 if __name__ == "__main__":

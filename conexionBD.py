@@ -140,11 +140,17 @@ class ConexionBD:
 
                     lista = listarecibida
 
+                    #consulta parametrizada no funciona. FALLO=incomplete imput
+
+                    #self.cursor.execute("INSERT INTO clientes VALUES(?,?,?,?,?", lista)
+
                     self.cursor.execute("INSERT INTO clientes VALUES( '" + lista[0] +
                                         "' , '" + lista[1] +
                                         "' , '" + lista[2] +
                                         "' , " + str(lista[3]) +
                                         " , " + str(lista[4]) + ")")
+
+
 
         except dbapi.DatabaseError as e:
             print("Erro facendo insert cliente: " + str(e))
