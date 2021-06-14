@@ -120,7 +120,7 @@ class Ventana():
             self.txtcomentarios.set_text("Operacion OK")
 
 
-            #self.montatreeWievCli()
+            self.montatreeWievCli()
 
         else:
                 self.txtcomentarios.set_text("DNI duplicado")
@@ -486,18 +486,38 @@ class Ventana():
 
         #self.treeView.Nodes.Clear()
 
+
+
         baseDatos = ConexionBD("baseDI.dat")
 
 
 
         listaClientes = baseDatos.consultaSenParametros("SELECT * FROM clientes")
 
-        #for registro in listaClientes:
-            #modelo_tabla.delete(registro)
-
-
         for cliente in listaClientes:
             self.modelo_tabla.append(cliente)
+
+        def is_emply(compro):
+            if len(compro) == 0:
+                return True
+            return False
+
+        """if is_emply(listaClientes)==False:
+
+            for cliente in listaClientes:
+                self.modelo_tabla.append(cliente)
+
+
+
+        else:
+
+
+            self.modelo_tabla.delete()"""
+
+
+
+
+
 
         self.treeView.set_model(self.modelo_tabla)
         x = 0
@@ -507,7 +527,7 @@ class Ventana():
             celda = Gtk.CellRendererText()
             colcli = Gtk.TreeViewColumn(columnas, celda, text=x)
             celda.props.editable = True
-            celda.connect("edited", self.on_celta_edite,x,self.modelo_tabla)
+            celda.connect("edited", self.on_celda_edite,x,self.modelo_tabla)
 
             #ordenar las columnas por valor
 
@@ -520,7 +540,7 @@ class Ventana():
     # self.treeView.add(tablaCliente)
 
 
-    def on_celta_edite(self,celda,fila,texto,columna,modelo):
+    def on_celda_edite(self,celda,fila,texto,columna,modelo):
         modelo [fila][columna] = texto
 
 

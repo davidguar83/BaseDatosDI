@@ -9,13 +9,14 @@ from reportlab.platypus import Paragraph
 from reportlab.platypus import Image
 from reportlab.platypus import Spacer
 from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfgen import canvas
 
 
 estiloHoja = getSampleStyleSheet()
 story = []
 
-fich_imagen = "/home/david/Descargas/Base_Datos.jpg"
+fich_imagen = "/home/sparrow/PycharmProjects/BaseDatosDI/Base_Datos.jpg"
 imagen_logo = Image(os.path.relpath(fich_imagen),width=400,height=100)
 story.append(imagen_logo)
 
@@ -25,10 +26,11 @@ cabecera.pageBreakBefore=0
 cabecera.keepWithNext=0
 cabecera.backColor=colors.green
 
-parrafo= Paragraph("Bade de Datod DI",cabecera)
+parrafo= Paragraph("Bade de Datos DI",cabecera)
 story.append(parrafo)
 
 cadena = " Datos de Clientes"
+
 estilo = estiloHoja['BodyText']
 parrafo2 = Paragraph(cadena,estilo)
 story.append(parrafo2)
@@ -95,7 +97,11 @@ tablacli = Table(listacli)
 
 tablacli.setStyle([('TEXTCOLOR',(0,0),(-1,0),colors.blueviolet)])
 tablacli.setStyle([('BACKGROUND',(0,1),(-1,-1),colors.greenyellow)])
-tablacli.setStyle([('INNERGIRD',(0,1),(-1,-1),0.25,colors.blueviolet)])
+tablacli.setStyle([('BOX',(0,1),(-1,-1),0.25,colors.black)])
+tablacli.setStyle([('INNERGRID',(0,1),(-1,-1),0.25,colors.black)])
+
+
+
 story.append(tablacli)
 
 story.append(Spacer(0,20))
@@ -112,7 +118,8 @@ tablapro = Table(listapro)
 
 tablapro.setStyle([('TEXTCOLOR',(0,0),(-1,0),colors.blueviolet)])
 tablapro.setStyle([('BACKGROUND',(0,1),(-1,-1),colors.greenyellow)])
-tablapro.setStyle([('INNERGIRD',(0,1),(-1,-1),0.25,colors.blueviolet)])
+tablapro.setStyle([('BOX',(0,1),(-1,-1),0.25,colors.black)])
+tablapro.setStyle([('INNERGRID',(0,1),(-1,-1),0.25,colors.black)])
 story.append(tablapro)
 
 
@@ -130,6 +137,8 @@ tablaven = Table(listaven)
 tablaven.setStyle([('TEXTCOLOR',(0,0),(-1,0),colors.blueviolet)])
 tablaven.setStyle([('BACKGROUND',(0,1),(-1,-1),colors.greenyellow)])
 tablaven.setStyle([('INNERGIRD',(0,1),(-1,-1),0.25,colors.blueviolet)])
+tablaven.setStyle([('BOX',(0,1),(-1,-1),0.25,colors.black)])
+tablaven.setStyle([('INNERGRID',(0,1),(-1,-1),0.25,colors.black)])
 story.append(tablaven)
 
 
