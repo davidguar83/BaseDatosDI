@@ -170,13 +170,15 @@ class Ventana():
 
     def btn_ingrasar_cli(self, boton):
 
-        modelo, fila = self.seleccion.get_selected()
+        self.modelo_tabla, fila = self.seleccion.get_selected()
         if fila is not None:
-            self.txtdni.set_text(modelo[fila][0])
-            self.txtnombre.set_text(modelo[fila][1])
-            self.txtapellidos.set_text(modelo[fila][2])
-            self.txttelefono.set_text(str(modelo[fila][3]))
-            self.txtdeuda.set_text(str(modelo[fila][4]))
+            self.txtdni.set_text(self.modelo_tabla[fila][0])
+            self.txtnombre.set_text(self.modelo_tabla[fila][1])
+            self.txtapellidos.set_text(self.modelo_tabla[fila][2])
+            self.txttelefono.set_text(str(self.modelo_tabla[fila][3]))
+            self.txtdeuda.set_text(str(self.modelo_tabla[fila][4]))
+
+
 
 
         baseDatos = ConexionBD("baseDI.dat")
@@ -198,7 +200,7 @@ class Ventana():
             consulta.append(self.txttelefono.get_text())
             consulta.append(self.txtdeuda.get_text())
 
-            modelo.append()
+
 
             # metodo conexinDB
 
@@ -206,8 +208,7 @@ class Ventana():
 
             self.txtcomentarios.set_text("Operacion OK")
 
-
-            #self.montatreeWievCli()
+            self.modelo_tabla.append()
 
         else:
                 self.txtcomentarios.set_text("DNI duplicado")
