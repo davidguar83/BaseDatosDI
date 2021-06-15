@@ -57,7 +57,21 @@ class Ventana():
         for cliente in listaClientes:
             modelo_tabla.append(cliente)
 
+        treeVCli = Gtk.TreeView(modelo_tabla)
+        self.seleccion = treeVCli.get_selection()
+        self.seleccion.connect("changed", self.treevcli_selec_chan)
 
+        for x, columnas in enumerate(["DNI", "Nombre", "Apellidos", "Telefono", "Deuda"]):
+            celda = Gtk.CellRendererText()
+            columnacli = Gtk.TreeViewColumn(columnas, celda, text=x)
+            celda.props.editable = True
+            # celda.set_property("editable",True)
+            celda.connect("edited", self.celda_edit, x, modelo_tabla)
+            # ordenar las columnas por valor
+            columnacli.set_sort_column_id(x)
+            self.treeView.append_column(columnacli)
+        self.treeView.set_model(modelo_tabla)
+        self.treeView.set_reorderable(True)
 
         # ventana provedor txt y treeweiv
 
@@ -67,6 +81,25 @@ class Ventana():
         self.txtcomentariospro = builder.get_object("txtcomentariospro")
         self.treeViedpro = builder.get_object("treeviewpro")
 
+        baseDatos = ConexionBD("baseDI.dat")
+        modelo_tabla_pro = Gtk.ListStore(int, str, float)
+        listaPro = baseDatos.consultaSenParametros("SELECT * FROM productos")
+        for produc in listaPro:
+            modelo_tabla_pro.append(produc)
+
+        treeVPro = Gtk.TreeView(modelo_tabla_pro)
+        self.seleccionpro = treeVPro.get_selection()
+        self.seleccionpro.connect("changed", self.treevpro_selec_chan)
+
+        self.treeViedpro.set_model(modelo_tabla_pro)
+        for x, columpro in enumerate(["Referen","Nombre","P.V.P."]):
+            celdapro = Gtk.CellRendererText()
+            colpro = Gtk.TreeViewColumn(columpro, celdapro, text=x)
+            celdapro.props.editable = True
+            celdapro.connect("edited", self.on_celda_edite, x, modelo_tabla_pro)
+            colpro.set_sort_column_id(x)
+            self.treeViedpro.append_column(colpro)
+        self.treeViedpro.set_reorderable(True)
 
         # ventana ventas txt
 
@@ -76,36 +109,41 @@ class Ventana():
         self.txtcomentariosven = builder.get_object("txtcomentariosven")
         self.treeViedven = builder.get_object("treeviewven")
 
-        treeVCli=Gtk.TreeView(modelo_tabla)
-        self.seleccion = treeVCli.get_selection()
-        self.seleccion.connect("changed" ,self.treevcli_selec_chan)
 
-        for x, columnas in enumerate(["DNI", "Nombre", "Apellidos", "Telefono", "Deuda"]):
-            celda = Gtk.CellRendererText()
-            columnacli = Gtk.TreeViewColumn(columnas, celda, text=x)
-            celda.props.editable = True
-            #celda.set_property("editable",True)
+        baseDatos = ConexionBD("baseDI.dat")
+        modelo_tabla_ven = Gtk.ListStore(int, str, int)
+        listaVen = baseDatos.consultaSenParametros("SELECT * FROM ventas")
 
-            celda.connect("edited", self.celda_edit, x, modelo_tabla)
+        for produc in listaVen:
+            modelo_tabla_ven.append(produc)
 
-            # ordenar las columnas por valor
+        treeVVen = Gtk.TreeView(modelo_tabla_ven)
+        self.seleccionVen = treeVVen.get_selection()
+        self.seleccionVen.connect("changed", self.treevVen_selec_chan)
 
-            columnacli.set_sort_column_id(x)
+        self.treeViedven.set_model(modelo_tabla_ven)
 
-            self.treeView.append_column(columnacli)
+        for x, columpro in enumerate(["Referencia","Nombre","Cantidad"]):
+            celdaven = Gtk.CellRendererText()
+            colven = Gtk.TreeViewColumn(columpro, celdaven, text=x)
+            colven.set_sort_column_id(x)
+
+            celdaven.props.editable = True
+
+            celdaven.connect("edited", self.celda_change, x, modelo_tabla_ven)
+
+            self.treeViedven.append_column(colven)
+
+        self.treeViedven.set_reorderable(True)
 
 
-        self.treeView.set_model(modelo_tabla)
-        self.treeView.set_reorderable(True)
-
-        #self.visualizarTreeWeiv()
         VentanaDatos = builder.get_object("VentanaDatos")
         VentanaDatos.show_all()
 
     def celda_edit(self ,celda ,fila ,texto ,columna ,modelo):
         modelo [fila][columna] = texto
 
-    def celda_change(self ,combo ,fila ,texto ,modelo ,columna):
+    def celda_change(self ,celda ,fila ,texto ,columna ,modelo):
 
         modelo [fila][columna] = texto
 
@@ -114,7 +152,7 @@ class Ventana():
 
     def treevcli_selec_chan(self ):
 
-        modelo ,fila = self.selection.get_selected()
+        modelo ,fila = self.seleccion.get_selected()
         if fila is not None:
 
             self.txtdni.set_text(modelo [fila][0])
@@ -124,6 +162,23 @@ class Ventana():
             self.txtdeuda.set_text(str(modelo[fila][4]))
 
 
+    def treevpro_selec_chan(self ):
+
+        modelo ,fila = self.seleccionpro.get_selected()
+        if fila is not None:
+
+            self.txtrefpro.set_text(str(modelo [fila][0]))
+            self.txtnombrepro.set_text(modelo[fila][1])
+            self.txtxpvppro.set_text(str(modelo[fila][2]))
+
+    def treevVen_selec_chan(self ):
+
+        modelo ,fila = self.seleccionVen.get_selected()
+        if fila is not None:
+
+            self.txtrefven.set_text(str(modelo [fila][0]))
+            self.txtnombreven.set_text(modelo[fila][1])
+            self.txtcanven.set_text(str(modelo[fila][2]))
 
 
     def btn_modi_deuda_cli(self, boton, seleccion):
@@ -180,68 +235,54 @@ class Ventana():
         :returns:Lista de datos clientes.
         :rtype:str,int
         """
-
         self.modelo_tabla, fila = self.seleccion.get_selected()
-
         baseDatos = ConexionBD("baseDI.dat")
         dni = self.txtdni.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?", dni)
-        def is_emply(Ñ):
-            if len(Ñ) == 0:
-                return True
-            return False
-
-        # print(is_emply(listaClientes))
-
         consulta = list()
-
-        if is_emply(listaClientes) == True:
+        if len(listaClientes) == 0:
             consulta.append(self.txtdni.get_text())
             consulta.append(self.txtnombre.get_text())
             consulta.append(self.txtapellidos.get_text())
             consulta.append(int(self.txttelefono.get_text()))
             consulta.append(int(self.txtdeuda.get_text()))
-
-
-
             # metodo conexinDB
-
             baseDatos.ingresarCliente(consulta)
-
             self.txtcomentarios.set_text("Operacion OK")
-
             self.modelo_tabla.append(consulta)
-
         else:
                 self.txtcomentarios.set_text("DNI duplicado")
                 print("dni duplicado")
 
     def btn_ingrasar_pro(self, boton):
+        """inserta una funcion y sus argumentos en el grupo de procesoso.
+
+                La entrada se inserta en las colas de forma rotatoria.
+                Cada trabajo es identificado por un indice que devuelve la funcion.
+                No todos los parametros del multiprocesamiento original.
+                Pool.apply_aync se han implementado hasta ahora
+
+                :param func:Funcion a procesar.
+                :type func:invocable.
+                :param args:Argumentos para que la funcion procese.
+                :types args:Tuple.
+                :returns:Lista de datos clientes.
+                :rtype:str,int
+                """
+        self.modelo_tabla_pro, fila = self.seleccionpro.get_selected()
         baseDatos = ConexionBD("baseDI.dat")
         ref = self.txtrefpro.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM productos WHERE ref=?", ref)
-
-        def is_emply(compro):
-            if len(compro) == 0:
-                return True
-            return False
-
-        consulta = list()
-
-        if is_emply(listaClientes) == True:
-            consulta.append(self.txtrefpro.get_text())
-            consulta.append(self.txtnombrepro.get_text())
-            consulta.append(self.txtxpvppro.get_text())
-
+        consulta2 = list()
+        if len(listaClientes) == 0:
+            consulta2.append(int(self.txtrefpro.get_text()))
+            consulta2.append(self.txtnombrepro.get_text())
+            consulta2.append(float(self.txtxpvppro.get_text()))
             # metodo conexinDB
-
-            baseDatos.ingresarProducto(consulta)
-
-            # self.montatreeWievPro()
+            baseDatos.ingresarProducto(consulta2)
 
             self.txtcomentariospro.set_text("Operacion OK")
-
-
+            self.modelo_tabla_pro.append(consulta2)
         else:
 
             self.txtcomentariospro.set_text("REF. duplicado")
@@ -254,6 +295,23 @@ class Ventana():
 
 
     def btn_ingresar_ven(self, boton):
+        """inserta una funcion y sus argumentos en el grupo de procesoso.
+
+                La entrada se inserta en las colas de forma rotatoria.
+                Cada trabajo es identificado por un indice que devuelve la funcion.
+                No todos los parametros del multiprocesamiento original.
+                Pool.apply_aync se han implementado hasta ahora
+
+                :param func:Funcion a procesar.
+                :type func:invocable.
+                :param args:Argumentos para que la funcion procese.
+                :types args:Tuple.
+                :returns:Lista de datos clientes.
+                :rtype:str,int
+                """
+
+        self.modelo_tabla_ven, fila = self.seleccionVen.get_selected()
+
         baseDatos = ConexionBD("baseDI.dat")
         ref = self.txtrefven.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM ventas WHERE ref=?", ref)
@@ -263,19 +321,19 @@ class Ventana():
             return False
 
 
-        consulta = list()
+        consulta3 = list()
 
         if is_emply(listaClientes) == True:
-            consulta.append(self.txtrefven.get_text())
-            consulta.append(self.txtnombreven.get_text())
-            consulta.append(self.txtcanven.get_text())
+            consulta3.append(int(self.txtrefven.get_text()))
+            consulta3.append(self.txtnombreven.get_text())
+            consulta3.append(int(self.txtcanven.get_text()))
 
             # metodo conexinDB
 
-            baseDatos.ingresarVentas(consulta)
+            baseDatos.ingresarVentas(consulta3)
 
             self.txtcomentariosven.set_text("Operacion OK")
-            # self.montatreeWievVen()
+            self.modelo_tabla_ven.append(consulta3)
 
         else:
 
@@ -287,6 +345,19 @@ class Ventana():
 
 
     def btn_limpiar(self, boton):
+        """inserta una funcion y sus argumentos en el grupo de procesoso.
+
+
+                Metodo que dirve para vaciar los txt de todas las ventanas.
+
+                :param func:Funcion a procesar.
+                :type func:invocable.
+                :param args:Argumentos para que la funcion procese.
+                :types args:Objetos txt
+                :returns:Objetos txt vacios
+                :rtype:null
+                """
+
 
         self.txtdni.set_text("")
         self.txtnombre.set_text("")
@@ -307,6 +378,20 @@ class Ventana():
 
 
     def btn_consulta_cli(self, boton):
+        """inserta una funcion y sus argumentos en el grupo de procesoso.
+
+                        Metodo que nos devuelve una Tupla con el dato a verificar.
+                        El dato se casa del un txt.
+                        Se envia a otra clase para que realice la consulta.
+                        Nos devuelve una Tupla.
+
+                        :param func:Funcion a procesar.
+                        :type func:invocable.
+                        :param args:Argumentos para que la funcion procese.
+                        :types args:Tuple.
+                        :returns:Lista de datos clientes.
+                        :rtype:str,int
+                        """
 
         baseDatos = ConexionBD("baseDI.dat")
         dni = self.txtdni.get_text()
@@ -335,6 +420,20 @@ class Ventana():
 
 
     def btn_consulta_pro(self, boton):
+        """inserta una funcion y sus argumentos en el grupo de procesoso.
+
+                                Metodo que nos devuelve una Tupla con el dato a verificar.
+                                El dato se casa del un txt.
+                                Se envia a otra clase para que realice la consulta.
+                                Nos devuelve una Tupla.
+
+                                :param func:Funcion a procesar.
+                                :type func:invocable.
+                                :param args:Argumentos para que la funcion procese.
+                                :types args:Tuple.
+                                :returns:Lista de datos clientes.
+                                :rtype:str,int
+                                """
         baseDatos = ConexionBD("baseDI.dat")
         ref = self.txtrefpro.get_text()
         listaproductos = baseDatos.consultaConParametros("SELECT * FROM productos WHERE ref=?", ref)
@@ -356,6 +455,20 @@ class Ventana():
         # self.txtcomentariospro.set_text("consulta realizada")
 
     def btn_consulta_ven(self, boton):
+        """inserta una funcion y sus argumentos en el grupo de procesoso.
+
+                                Metodo que nos devuelve una Tupla con el dato a verificar.
+                                El dato se casa del un txt.
+                                Se envia a otra clase para que realice la consulta.
+                                Nos devuelve una Tupla.
+
+                                :param func:Funcion a procesar.
+                                :type func:invocable.
+                                :param args:Argumentos para que la funcion procese.
+                                :types args:Tuple.
+                                :returns:Lista de datos clientes.
+                                :rtype:str,int
+                                """
         baseDatos = ConexionBD("baseDI.dat")
         refven = self.txtrefven.get_text()
         listaven = baseDatos.consultaConParametros("SELECT * FROM ventas WHERE ref=?", refven)
@@ -380,6 +493,18 @@ class Ventana():
 
 
     def btn_modi_pvp_pro(self, boton):
+        """inserta una funcion y sus argumentos en el grupo de procesoso.
+
+                                Metodo que permite modificar los atos en la base de datos
+                                Tambien el el TreeView
+
+                                :param func:Funcion a procesar.
+                                :type func:invocable señal boton
+                                :param args:Argumentos para que la funcion procese.
+                                :types args:Tuple.
+                                :returns:Lista de datos clientes.
+                                :rtype:str,int
+                                """
         baseDatos = ConexionBD("baseDI.dat")
         ref = self.txtrefpro.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM productos WHERE ref=?", ref)
@@ -447,8 +572,20 @@ class Ventana():
 
 
     def btn_borrar_cli(self, boton):
+        """inserta una funcion y sus argumentos en el grupo de procesoso.
 
+                                Metodo para eliminar datos completos.
+                                Base datos y TreeView
 
+                                :param func:Funcion a procesar.
+                                :type func:invocable.
+                                :param args:Argumentos para que la funcion procese.
+                                :types args:Tuple.
+                                :returns:Lista de datos clientes.
+                                :rtype:str,int
+                                """
+
+        self.modelo_tabla, fila = self.seleccion.get_selected()
 
         baseDatos = ConexionBD("baseDI.dat")
         dni = self.txtdni.get_text()
@@ -466,13 +603,16 @@ class Ventana():
 
             for datodni in listaClientes:
 
-
                 dni = datodni[0]
 
-
-
-
             baseDatos.borrarCliente(dni)
+            #self.treeView.remove(self.modelo_tabla,[1])no
+            #self.treeView.remove([1])no
+            #self.modelo_tabla.remove(self.modelo_tabla,self.seleccion)no
+            #self.modelo_tabla.remove(self.seleccion)no
+            #self.modelo_tabla.remove([2])
+            self.treeView.remove(self.seleccion)
+            #self.modelo_tabla.remove(self.modelo_tabla,2)
 
             self.txtcomentarios.set_text("Cliente borrado")
             # self.montatreeWievCli()
@@ -533,57 +673,8 @@ class Ventana():
             self.txtcomentariosven.set_text("Producto venta borrado")
             # self.montatreeWievVen()
 
-    def montatreeWievPro(self):
 
-        columnaspro = ["Referen",
-                       "Nombre",
-                       "P.V.P."]
 
-        baseDatos = ConexionBD("baseDI.dat")
-        modelo_tabla_pro = Gtk.ListStore(int, str, int)
-        listaPro = baseDatos.consultaSenParametros("SELECT * FROM productos")
-
-        for produc in listaPro:
-            modelo_tabla_pro.append(produc)
-
-        self.treeViedpro.set_model(modelo_tabla_pro)
-
-        x = 0
-
-        for columpro in columnaspro:
-            celdapro = Gtk.CellRendererText()
-            colpro = Gtk.TreeViewColumn(columpro, celdapro, text=x)
-
-            colpro.set_sort_column_id(x)
-            self.treeViedpro.append_column(colpro)
-            x = x + 1
-        self.treeViedpro.set_reorderable(True)
-
-    def montatreeWievVen(self):
-
-        columnasven = ["Referencia",
-                       "Nombre",
-                       "Cantidad"]
-
-        baseDatos = ConexionBD("baseDI.dat")
-        modelo_tabla_ven = Gtk.ListStore(int, str, int)
-        listaPro = baseDatos.consultaSenParametros("SELECT * FROM ventas")
-
-        for produc in listaPro:
-            modelo_tabla_ven.append(produc)
-
-        self.treeViedven.set_model(modelo_tabla_ven)
-
-        x = 0
-
-        for columpro in columnasven:
-            celdaven = Gtk.CellRendererText()
-            colven = Gtk.TreeViewColumn(columpro, celdaven, text=x)
-            colven.set_sort_column_id(x)
-            self.treeViedven.append_column(colven)
-            x = x + 1
-
-        self.treeViedven.set_reorderable(True)
 
 
     def on_cerrar(self):

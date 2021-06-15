@@ -323,9 +323,6 @@ class ConexionBD:
                         self.cursor.execute(
                             "DELETE FROM clientes WHERE DNI= '" + DNI + "'")
 
-
-
-
             except dbapi.DatabaseError as e:
                 print("Erro facendo delete cliente: " + str(e))
                 return None
