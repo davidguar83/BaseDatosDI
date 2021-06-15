@@ -171,12 +171,7 @@ class Ventana():
     def btn_ingrasar_cli(self, boton):
 
         self.modelo_tabla, fila = self.seleccion.get_selected()
-        if fila is not None:
-            self.txtdni.set_text(self.modelo_tabla[fila][0])
-            self.txtnombre.set_text(self.modelo_tabla[fila][1])
-            self.txtapellidos.set_text(self.modelo_tabla[fila][2])
-            self.txttelefono.set_text(str(self.modelo_tabla[fila][3]))
-            self.txtdeuda.set_text(str(self.modelo_tabla[fila][4]))
+
 
 
 
@@ -184,8 +179,8 @@ class Ventana():
         baseDatos = ConexionBD("baseDI.dat")
         dni = self.txtdni.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?", dni)
-        def is_emply(compro):
-            if len(compro) == 0:
+        def is_emply(Ñ):
+            if len(Ñ) == 0:
                 return True
             return False
 
@@ -197,8 +192,8 @@ class Ventana():
             consulta.append(self.txtdni.get_text())
             consulta.append(self.txtnombre.get_text())
             consulta.append(self.txtapellidos.get_text())
-            consulta.append(self.txttelefono.get_text())
-            consulta.append(self.txtdeuda.get_text())
+            consulta.append(int(self.txttelefono.get_text()))
+            consulta.append(int(self.txtdeuda.get_text()))
 
 
 
@@ -208,7 +203,7 @@ class Ventana():
 
             self.txtcomentarios.set_text("Operacion OK")
 
-            self.modelo_tabla.append()
+            self.modelo_tabla.append(consulta)
 
         else:
                 self.txtcomentarios.set_text("DNI duplicado")
