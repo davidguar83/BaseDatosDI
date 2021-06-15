@@ -168,7 +168,7 @@ class Ventana():
             print("dni no existe")
 
 
-    def btn_ingrasar_cli(self, boton, seleccion):
+    def btn_ingrasar_cli(self, boton):
 
         modelo, fila = self.seleccion.get_selected()
         if fila is not None:
@@ -207,7 +207,7 @@ class Ventana():
             self.txtcomentarios.set_text("Operacion OK")
 
 
-            self.montatreeWievCli()
+            #self.montatreeWievCli()
 
         else:
                 self.txtcomentarios.set_text("DNI duplicado")
