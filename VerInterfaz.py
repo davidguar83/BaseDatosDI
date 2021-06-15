@@ -1,5 +1,3 @@
-
-
 import gi
 from conexionBD import ConexionBD
 
@@ -42,6 +40,8 @@ class Ventana():
 
         builder.connect_signals(sinais)
 
+
+
         # ventana cliente txt y treeVied
 
         self.txtdni = builder.get_object("txtdni")
@@ -51,6 +51,15 @@ class Ventana():
         self.txtdeuda = builder.get_object("txtdeuda")
         self.txtcomentarios = builder.get_object("txtcomentarios")
         self.treeView = builder.get_object("treeviewcli")
+
+
+        modelo_tabla = Gtk.ListStore(str, str, str, int, int)
+
+        baseDatos = ConexionBD("baseDI.dat")
+        listaClientes = baseDatos.consultaSenParametros("SELECT * FROM clientes")
+
+        for cliente in listaClientes:
+            modelo_tabla.append(cliente)
 
 
 
@@ -71,25 +80,105 @@ class Ventana():
         self.txtcomentariosven = builder.get_object("txtcomentariosven")
         self.treeViedven = builder.get_object("treeviewven")
 
+        treeVCli=Gtk.TreeView(modelo_tabla)
+        self.seleccion = treeVCli.get_selection()
+        self.seleccion.connect("changed" ,self.treevcli_selec_chan)
 
-        self.montatreeWievCli()
-        self.montatreeWievPro()
-        self.montatreeWievVen()
+        for x, columnas in enumerate(["DNI", "Nombre", "Apellidos", "Telefono", "Deuda"]):
+            celda = Gtk.CellRendererText()
+            columnacli = Gtk.TreeViewColumn(columnas, celda, text=x)
+            celda.props.editable = True
+            #celda.set_property("editable",True)
 
-        self.visualizarTreeWeiv()
+            celda.connect("edited", self.celda_edit, x, modelo_tabla)
 
+            # ordenar las columnas por valor
+
+            columnacli.set_sort_column_id(x)
+
+            self.treeView.append_column(columnacli)
+
+
+        self.treeView.set_model(modelo_tabla)
+        self.treeView.set_reorderable(True)
+
+        #self.visualizarTreeWeiv()
         VentanaDatos = builder.get_object("VentanaDatos")
         VentanaDatos.show_all()
 
-    def on_cerrar(self):
-        Gtk.main_quit()
+    def celda_edit(self ,celda ,fila ,texto ,columna ,modelo):
+        modelo [fila][columna] = texto
 
-    def btn_salir(self, boton):
+    def celda_change(self ,combo ,fila ,texto ,modelo ,columna):
 
-        print("boton pulsado")
-        self.on_cerrar()
+        modelo [fila][columna] = texto
 
-    def btn_ingrasar_cli(self, boton):
+    def on_celda_edite(self ,celda ,fila ,texto ,columna ,modelo):
+        modelo [fila][columna] = texto
+
+    def treevcli_selec_chan(self ):
+
+        modelo ,fila = self.selection.get_selected()
+        if fila is not None:
+
+            self.txtdni.set_text(modelo [fila][0])
+            self.txtnombre.set_text(modelo[fila][1])
+            self.txtapellidos.set_text(modelo[fila][2])
+            self.txttelefono.set_text(str(modelo[fila][3]))
+            self.txtdeuda.set_text(str(modelo[fila][4]))
+
+
+
+
+    def btn_modi_deuda_cli(self, boton, seleccion):
+        baseDatos = ConexionBD("baseDI.dat")
+        dni = self.txtdni.get_text()
+        listaClientes = baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?", dni)
+        def is_emply(compro):
+            if len(compro) == 0:
+                return True#vacia
+            return False
+
+        consulta = list()
+
+        if is_emply(listaClientes) == False:
+            modelo, fila = seleccion.get_selected()
+            if fila is not None:
+                modelo [fila][0] = self.txtdni.get_text()
+                modelo[fila][1] = self.txtnombre.get_text()
+                modelo[fila][2] = self.txtapellidos.get_text()
+                modelo[fila][3] = int(self.txttelefono.get_text())
+                modelo[fila][4] = int(self.txtdeuda.get_text())
+
+            consulta.append(self.txtdni.get_text())
+            consulta.append(self.txtnombre.get_text())
+            consulta.append(self.txtapellidos.get_text())
+            consulta.append(self.txttelefono.get_text())
+            consulta.append(self.txtdeuda.get_text())
+
+            # metodo conexinDB
+
+            baseDatos.modificarCliente(consulta)
+
+            self.txtcomentarios.set_text("Operacion OK")
+            # self.montatreeWievCli()
+
+        else:
+            self.txtcomentarios.set_text("DNI no existe")
+            print("dni no existe")
+
+
+    def btn_ingrasar_cli(self, boton, seleccion):
+
+        modelo, fila = self.seleccion.get_selected()
+        if fila is not None:
+            self.txtdni.set_text(modelo[fila][0])
+            self.txtnombre.set_text(modelo[fila][1])
+            self.txtapellidos.set_text(modelo[fila][2])
+            self.txttelefono.set_text(str(modelo[fila][3]))
+            self.txtdeuda.set_text(str(modelo[fila][4]))
+
+
         baseDatos = ConexionBD("baseDI.dat")
         dni = self.txtdni.get_text()
         listaClientes = baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?", dni)
@@ -98,10 +187,7 @@ class Ventana():
                 return True
             return False
 
-
-
-
-        #print(is_emply(listaClientes))
+        # print(is_emply(listaClientes))
 
         consulta = list()
 
@@ -112,8 +198,9 @@ class Ventana():
             consulta.append(self.txttelefono.get_text())
             consulta.append(self.txtdeuda.get_text())
 
+            modelo.append()
 
-            #metodo conexinDB
+            # metodo conexinDB
 
             baseDatos.ingresarCliente(consulta)
 
@@ -147,7 +234,7 @@ class Ventana():
 
             baseDatos.ingresarProducto(consulta)
 
-            #self.montatreeWievPro()
+            # self.montatreeWievPro()
 
             self.txtcomentariospro.set_text("Operacion OK")
 
@@ -157,10 +244,7 @@ class Ventana():
             self.txtcomentariospro.set_text("REF. duplicado")
             print("REF. duplicado")
 
-
-
-
-        #print("boton funciona")
+        # print("boton funciona")
 
 
 
@@ -188,7 +272,7 @@ class Ventana():
             baseDatos.ingresarVentas(consulta)
 
             self.txtcomentariosven.set_text("Operacion OK")
-            #self.montatreeWievVen()
+            # self.montatreeWievVen()
 
         else:
 
@@ -196,7 +280,7 @@ class Ventana():
             print("REF. duplicado")
 
         # print("boton funciona")
-        #self.txtcomentariosven.set_text("Operacion OK")
+        # self.txtcomentariosven.set_text("Operacion OK")
 
 
     def btn_limpiar(self, boton):
@@ -266,8 +350,7 @@ class Ventana():
 
             self.txtcomentariospro.set_text("consulta realizada")
 
-
-        #self.txtcomentariospro.set_text("consulta realizada")
+        # self.txtcomentariospro.set_text("consulta realizada")
 
     def btn_consulta_ven(self, boton):
         baseDatos = ConexionBD("baseDI.dat")
@@ -288,34 +371,6 @@ class Ventana():
 
 
 
-    def btn_modi_deuda_cli(self, boton):
-        baseDatos = ConexionBD("baseDI.dat")
-        dni = self.txtdni.get_text()
-        listaClientes = baseDatos.consultaConParametros("SELECT * FROM clientes WHERE dni=?", dni)
-        def is_emply(compro):
-            if len(compro) == 0:
-                return True
-            return False
-
-        consulta = list()
-
-        if is_emply(listaClientes) == False:
-            consulta.append(self.txtdni.get_text())
-            consulta.append(self.txtnombre.get_text())
-            consulta.append(self.txtapellidos.get_text())
-            consulta.append(self.txttelefono.get_text())
-            consulta.append(self.txtdeuda.get_text())
-
-            # metodo conexinDB
-
-            baseDatos.modificarCliente(consulta)
-
-            self.txtcomentarios.set_text("Operacion OK")
-            #self.montatreeWievCli()
-
-        else:
-            self.txtcomentarios.set_text("DNI no existe")
-            print("dni no existe")
 
 
 
@@ -345,7 +400,7 @@ class Ventana():
             baseDatos.modificarProductos(consulta)
 
             self.txtcomentariospro.set_text("Modificacion  OK")
-            #self.montatreeWievPro()
+            # self.montatreeWievPro()
 
         else:
             self.txtcomentariospro.set_text("REF no existe")
@@ -380,7 +435,7 @@ class Ventana():
             baseDatos.modificarVentas(consulta)
 
             self.txtcomentariosven.set_text("Modificacion OK")
-            #self.montatreeWievVen()
+            # self.montatreeWievVen()
 
         else:
             self.txtcomentariosven.set_text("REF no existe")
@@ -417,7 +472,7 @@ class Ventana():
             baseDatos.borrarCliente(dni)
 
             self.txtcomentarios.set_text("Cliente borrado")
-            #self.montatreeWievCli()
+            # self.montatreeWievCli()
 
 
     def btn_borrar_pro(self, boton):
@@ -445,7 +500,7 @@ class Ventana():
             baseDatos.borrarProvedor(ref)
 
             self.txtcomentariospro.set_text("Producto borrado")
-            #self.montatreeWievPro()
+            # self.montatreeWievPro()
 
 
     def btn_borrar_ven(self, boton):
@@ -473,81 +528,7 @@ class Ventana():
             baseDatos.borrarVentas(ref)
 
             self.txtcomentariosven.set_text("Producto venta borrado")
-            #self.montatreeWievVen()
-
-
-    def on_txt(self):
-
-        print("")
-
-    modelo_tabla = Gtk.ListStore(str, str, str, int, int)
-
-    def montatreeWievCli(self):
-
-        #self.treeView.Nodes.Clear()
-
-
-
-        baseDatos = ConexionBD("baseDI.dat")
-
-
-
-        listaClientes = baseDatos.consultaSenParametros("SELECT * FROM clientes")
-
-        for cliente in listaClientes:
-            self.modelo_tabla.append(cliente)
-
-        def is_emply(compro):
-            if len(compro) == 0:
-                return True
-            return False
-
-        """if is_emply(listaClientes)==False:
-
-            for cliente in listaClientes:
-                self.modelo_tabla.append(cliente)
-
-
-
-        else:
-
-
-            self.modelo_tabla.delete()"""
-
-
-
-
-
-
-        self.treeView.set_model(self.modelo_tabla)
-        x = 0
-        columnascli = ["DNI", "Nombre", "Apellidos", "Telefono", "Deuda"]
-
-        for columnas in columnascli:
-            celda = Gtk.CellRendererText()
-            colcli = Gtk.TreeViewColumn(columnas, celda, text=x)
-            celda.props.editable = True
-            celda.connect("edited", self.on_celda_edite,x,self.modelo_tabla)
-
-            #ordenar las columnas por valor
-
-            colcli.set_sort_column_id(x)
-
-            self.treeView.append_column(colcli)
-            x = x + 1
-
-        self.treeView.set_reorderable(True)
-    # self.treeView.add(tablaCliente)
-
-
-    def on_celda_edite(self,celda,fila,texto,columna,modelo):
-        modelo [fila][columna] = texto
-
-
-
-
-
-
+            # self.montatreeWievVen()
 
     def montatreeWievPro(self):
 
@@ -602,36 +583,16 @@ class Ventana():
         self.treeViedven.set_reorderable(True)
 
 
-    def limpiarTreeCli(self):
+    def on_cerrar(self):
+        Gtk.main_quit()
 
-        modelo_tabla = Gtk.ListStore(str, str, str, int, int)
+    def btn_salir(self, boton):
 
-        modelo_tabla.clear()
-
-        self.treeView.set_model(modelo_tabla)
-
-
-        x = 0
-        columnascli = ["DNI", "Nombre", "Apellidos", "Telefono", "Deuda"]
-
-        for columnas in columnascli:
-            celda = Gtk.CellRendererText()
-            colcli = Gtk.TreeViewColumn(columnas, celda, text=x)
-            self.treeView.append_column(colcli)
-            x = x + 1
-
-
-    def visualizarTreeWeiv(self):
-
-        registros = self.treeView.get_children()
-        for registro in registros:
-            print(registro[0])
-            print("ooo")
-
-
-
-
+        print("boton pulsado")
+        self.on_cerrar()
 
 if __name__ == "__main__":
     Ventana()
     Gtk.main()
+
+
