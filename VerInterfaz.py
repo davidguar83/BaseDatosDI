@@ -169,12 +169,23 @@ class Ventana():
 
 
     def btn_ingrasar_cli(self, boton):
+        
+        """inserta una funcion y sus argumentos en el grupo de procesoso.
+
+        La entrada se inserta en las colas de forma rotatoria.
+        Cada trabajo es identificado por un indice que devuelve la funcion.
+        No todos los parametros del multiprocesamiento original.
+        Pool.apply_aync se han implementado hasta ahora
+
+        :param func:Funcion a procesar.
+        :type func:invocable.
+        :param args:Argumentos para que la funcion procese.
+        :types args:Tuple.
+        :returns:Lista de datos clientes.
+        :rtype:str,int
+        """
 
         self.modelo_tabla, fila = self.seleccion.get_selected()
-
-
-
-
 
         baseDatos = ConexionBD("baseDI.dat")
         dni = self.txtdni.get_text()
